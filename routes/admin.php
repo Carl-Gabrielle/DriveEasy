@@ -10,8 +10,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     )->name('dashboard');
 
     Route::get('/application', fn () =>
-        Inertia::render('Admin/Applications')
-    )->name('application');
+        Inertia::render('Admin/Applicants')
+    )->name('applicants');
 
     Route::get('/course-registration', fn () =>
         Inertia::render('Admin/CourseApprovals')
@@ -29,9 +29,6 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Inertia::render('Admin/ManageMaterials')
     )->name('manage.materials');
 
-       Route::get('/interventions', fn () =>
-        Inertia::render('Admin/Interventions')
-    )->name('interventions');
 
       Route::get('/certificates', fn () =>
         Inertia::render('Admin/Certificates')

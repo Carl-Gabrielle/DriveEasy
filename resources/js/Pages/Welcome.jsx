@@ -4,7 +4,7 @@ export default function Welcome({ auth }) {
     return (
         <>
             <Head title="Welcome to DriveEasy" />
-            <div className="bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+            <div className="bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8  mt-12 sm:mt-0">
                 <div className="max-w-5xl w-full space-y-12 text-center">
                     <header className="space-y-4">
                         <h1 className="text-5xl font-bold text-gray-900">
@@ -39,10 +39,9 @@ export default function Welcome({ auth }) {
                             )}
                         </div>
                     </header>
-
                     <section className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
                         <div className="p-6 bg-gray-50 rounded-xl shadow-sm">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-2">Expert Instructors</h3>
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2">Professional Instructors</h3>
                             <p className="text-gray-600">Certified and experienced professionals who guide you step by step.</p>
                         </div>
                         <div className="p-6 bg-gray-50 rounded-xl shadow-sm">

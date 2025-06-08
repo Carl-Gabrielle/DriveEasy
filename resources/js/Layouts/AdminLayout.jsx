@@ -24,11 +24,25 @@ export default function AdminLayout({ header, children }) {
                                 </Link>
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('admin.application')} active={route().current('admin.application')}>
-                                    Applications
+                                <NavLink
+                                    href={route('admin.applicants')}
+                                    active={route().current('admin.applicants')}
+                                    className="relative"
+                                >
+                                    <span className="inline-flex items-center gap-1">
+                                        Applicants
+                                        <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                                    </span>
                                 </NavLink>
-                                <NavLink href={route('admin.course.approvals')} active={route().current('admin.course.approvals')}>
-                                    Course Approvals
+                                <NavLink
+                                    href={route('admin.course.approvals')}
+                                    active={route().current('admin.course.approvals')}
+                                    className="relative"
+                                >
+                                    <span className="inline-flex items-center gap-1">
+                                        Course Approvals
+                                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                    </span>
                                 </NavLink>
                                 <NavLink href={route('admin.schedule')} active={route().current('admin.schedule')}>
                                     Schedules
@@ -39,14 +53,10 @@ export default function AdminLayout({ header, children }) {
                                 <NavLink href={route('admin.manage.materials')} active={route().current('admin.manage.materials')}>
                                     Manage Materials
                                 </NavLink>
-                                <NavLink href={route('admin.interventions')} active={route().current('admin.interventions')}>
-                                    Interventions
-                                </NavLink>
                                 <NavLink href={route('admin.certificates')} active={route().current('admin.certificates')}>
                                     Certificates
                                 </NavLink>
                             </div>
-
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
@@ -147,7 +157,7 @@ export default function AdminLayout({ header, children }) {
                         <ResponsiveNavLink
                             href={route('application')} active={route().current('application')}
                         >
-                            Application
+                            Applicants
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('course.registration')} active={route().current('course.registration')}

@@ -25,7 +25,7 @@ export default function Login({ status, canResetPassword }) {
         <GuestLayout>
             <Head title="Log in" />
 
-            <div className="max-w-md mx-auto bg-white p-8 rounded-lg mt-10">
+            <div className="max-w-md mx-auto bg-white p-8 rounded-lg  mt-12 sm:mt-0">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
                 <p className="text-sm text-center text-gray-600 mb-4">
                     Don't have an account?{' '}
