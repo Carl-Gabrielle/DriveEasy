@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\StudentLearningMaterialController;
 
 Route::middleware(['auth', 'verified', 'student'])->group(function () {
     Route::get('/application', fn () =>
@@ -20,7 +21,6 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
         Inertia::render('Student/Performance')
     )->name('performance');
 
-    Route::get('/learning-materials', fn () =>
-        Inertia::render('Student/LearningMaterials')
-    )->name('learning.materials');
+  Route::get('/learning-materials', [StudentLearningMaterialController::class, 'index'])
+    ->name('learning.materials');
 });

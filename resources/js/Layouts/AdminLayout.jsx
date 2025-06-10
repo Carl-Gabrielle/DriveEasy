@@ -50,7 +50,10 @@ export default function AdminLayout({ header, children }) {
                                 <NavLink href={route('admin.performance')} active={route().current('admin.performance')}>
                                     Performance Rating
                                 </NavLink>
-                                <NavLink href={route('admin.manage.materials')} active={route().current('admin.manage.materials')}>
+                                <NavLink
+                                    href={route('admin.materials.index')}
+                                    active={route().current('admin.materials.index')}
+                                >
                                     Manage Materials
                                 </NavLink>
                                 <NavLink href={route('admin.certificates')} active={route().current('admin.certificates')}>
@@ -175,9 +178,9 @@ export default function AdminLayout({ header, children }) {
                             Performanece & Result
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            href={route('learning.materials')} active={route().current('learning.materials')}
+                            href={route('admin.materials.index')} active={route().current('admin.materials.index')}
                         >
-                            Learning Materials
+                            Manage Materials
                         </ResponsiveNavLink>
                     </div>
 

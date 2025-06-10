@@ -40,7 +40,6 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <NavLink href={route('learning.materials')} active={route().current('learning.materials')}>
                                     Learning Materials
                                 </NavLink>
-
                             </div>
                         </div>
 

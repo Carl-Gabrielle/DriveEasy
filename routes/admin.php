@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', fn () =>
@@ -25,13 +26,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Inertia::render('Admin/PerformanceRating')
     )->name('performance');
 
-    Route::get('/manage-materials', fn () =>
-        Inertia::render('Admin/ManageMaterials')
-    )->name('manage.materials');
-
-
       Route::get('/certificates', fn () =>
         Inertia::render('Admin/Certificates')
     )->name('certificates');
+
 
 });
