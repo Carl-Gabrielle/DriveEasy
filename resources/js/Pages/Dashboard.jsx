@@ -23,7 +23,7 @@ export default function Dashboard() {
                         </p>
                         <div className="mt-6">
                             <Link
-                                href={route('application')}
+                                href={route('student.applications')}
                                 className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition"
                             >
                                 Submit Requirements

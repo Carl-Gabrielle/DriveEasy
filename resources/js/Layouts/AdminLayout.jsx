@@ -25,8 +25,8 @@ export default function AdminLayout({ header, children }) {
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('admin.applicants')}
-                                    active={route().current('admin.applicants')}
+                                    href={route('admin.applicants.index')}
+                                    active={route().current('admin.applicants.index')}
                                     className="relative"
                                 >
                                     <span className="inline-flex items-center gap-1">
@@ -158,7 +158,7 @@ export default function AdminLayout({ header, children }) {
                 >
                     <div className="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            href={route('application')} active={route().current('application')}
+                            href={route('admin.applicants.index')} active={route().current('admin.applicants.index')}
                         >
                             Applicants
                         </ResponsiveNavLink>

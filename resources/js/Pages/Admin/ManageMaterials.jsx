@@ -60,6 +60,7 @@ export default function ManageMaterials({ materials = [], flash }) {
                             </div>
                         </div>
                     </div>
+
                     {flash?.success && (
                         <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded">
                             <div className="flex items-center">

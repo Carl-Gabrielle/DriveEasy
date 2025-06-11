@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function Performance() {
-    const performanceStatus = 'passed';
+    const performanceStatus = 'failed';
 
     return (
         <AuthenticatedLayout>
@@ -57,8 +57,8 @@ export default function Performance() {
                                         </ul>
                                         <div className="mt-4">
                                             <a
-                                                href="/learning-intervention"
-                                                className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                                                href={route('learning.materials')}
+                                                className="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
                                             >
                                                 View Learning Materials
                                             </a>
