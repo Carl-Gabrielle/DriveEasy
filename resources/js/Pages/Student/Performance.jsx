@@ -10,7 +10,7 @@ export default function Performance() {
             <Head title="Performance" />
 
             <div className="py-12">
-                <div className="mx-auto max-w-4xl sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="bg-white shadow-lg rounded-lg p-8">
                         <h1 className="text-3xl font-bold text-gray-800 mb-4">Performance Overview</h1>
                         <p className="text-gray-600 mb-6">

@@ -195,7 +195,6 @@ function CompactApplicationCard({ app }) {
                             </div>
                         </>
                     )}
-
                 </div>
             )}
         </div>

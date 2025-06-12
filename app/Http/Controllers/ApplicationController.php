@@ -35,22 +35,24 @@ $user = Auth::user();
         ? $request->file('marriageContract')->store('applications/marriage_contracts', 'public')
         : null;
 
-    if ($existingApp) {
-        $existingApp->update([
-            'birth_certificate' => $birthCert,
-            'gov_id' => $govId,
-            'id_picture' => $idPic,
-            'marriage_contract' => $marriageContract,
-        ]);
-    } else {
-        StudentApplication::create([
-            'user_id' => $user->id,
-            'birth_certificate' => $birthCert,
-            'gov_id' => $govId,
-            'id_picture' => $idPic,
-            'marriage_contract' => $marriageContract,
-        ]);
-    }
+   if ($existingApp) {
+    $existingApp->update([
+        'birth_certificate' => $birthCert,
+        'gov_id' => $govId,
+        'id_picture' => $idPic,
+        'marriage_contract' => $marriageContract,
+        'status' => 'pending',
+    ]);
+} else {
+    StudentApplication::create([
+        'user_id' => $user->id,
+        'birth_certificate' => $birthCert,
+        'gov_id' => $govId,
+        'id_picture' => $idPic,
+        'marriage_contract' => $marriageContract,
+    ]);
+}
+
 
     return redirect()->route('student.applications')->with('success', $existingApp ? 'Application updated successfully!' : 'Application submitted successfully!');
 }

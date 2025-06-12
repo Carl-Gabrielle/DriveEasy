@@ -25,7 +25,7 @@ export default function CourseRegistration() {
         <AuthenticatedLayout>
             <Head title="Course Registration" />
             <div className="py-12">
-                <div className="mx-auto max-w-3xl sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="bg-white shadow-lg rounded-lg p-8">
                         <h1 className="text-3xl font-bold mb-6 text-gray-800">Course Registration</h1>
                         <p className="text-gray-600 mb-8">

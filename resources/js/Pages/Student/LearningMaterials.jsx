@@ -20,14 +20,13 @@ export default function LearningMaterials({ materials = [] }) {
         <AuthenticatedLayout>
             <Head title="Learning Materials" />
             <div className="py-12">
-                <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="bg-white shadow rounded-lg p-8">
                         <h1 className="text-3xl font-bold text-gray-800 mb-6">Learning Materials</h1>
                         <p className="text-gray-600 mb-8">
                             Access official LTO reviewers and helpful video tutorials to improve your driving skills.
                         </p>
 
-                        {/* Dynamic PDF Materials Section */}
                         <div className="mb-10">
                             <h2 className="text-xl font-semibold text-gray-700 mb-4">📘 LTO Reviewers (PDF)</h2>
                             {pdfMaterials.length === 0 ? (
