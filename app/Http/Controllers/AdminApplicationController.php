@@ -61,7 +61,18 @@ class AdminApplicationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+         $request->validate([
+        'status' => 'required|in:approved,rejected',
+        'admin_remarks' => 'nullable|string|max:500',
+    ]);
+
+    $application = StudentApplication::findOrFail($id);
+    $application->status = $request->status;
+    $application->admin_remarks = $request->admin_remarks;
+    $application->save();
+
+    return to_route('admin.applicants.index')
+            ->with('success', 'Application  created successfully.');
     }
 
     /**

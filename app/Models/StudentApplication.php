@@ -15,6 +15,8 @@ class StudentApplication extends Model
         'gov_id',
         'id_picture',
         'marriage_contract',
+        'status',
+        'admin_remarks',
     ];
 
     public function user()

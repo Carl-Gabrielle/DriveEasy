@@ -11,6 +11,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Inertia::render('Admin/Dashboard')
     )->name('dashboard');
 
+ 
   Route::resource('applicants', AdminApplicationController::class);
 
     Route::get('/course-registration', fn () =>

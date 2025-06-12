@@ -92,7 +92,7 @@ export default function ManageMaterials({ materials = [], flash }) {
                                                 id="type"
                                                 value={data.type}
                                                 onChange={(e) => setData('type', e.target.value)}
-                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                                                className="mt-1 block w-full pl-3 cursor-pointer pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                                             >
                                                 <option value="pdf">PDF Document</option>
                                                 <option value="video">YouTube Video</option>
@@ -315,7 +315,6 @@ export default function ManageMaterials({ materials = [], flash }) {
                                                                     </div>
                                                                 </div>
                                                             )}
-
                                                             <div className="mt-4 flex justify-between items-center text-sm text-gray-500">
                                                                 <span>Uploaded: {new Date(material.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                                                             </div>

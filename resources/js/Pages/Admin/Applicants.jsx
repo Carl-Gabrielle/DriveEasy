@@ -1,9 +1,11 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
+import InputLabel from '@/Components/InputLabel';
 import { FaCheckCircle, FaTimes, FaClock, FaTimesCircle, FaChevronDown, FaChevronUp, FaUser, FaPhone, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
 
 export default function Applicants({ applications = [] }) {
+
     return (
         <AdminLayout>
             <Head title="Applicants" />
@@ -44,7 +46,25 @@ export default function Applicants({ applications = [] }) {
 
 function CompactApplicationCard({ app }) {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [remarks, setRemarks] = useState('');
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        status: '',
+        admin_remarks: '',
+        _method: 'PUT',
+    });
+
+    const handleSubmit = (e, status) => {
+        e.preventDefault();
+        setData('status', status);
+        post(route('admin.applicants.update', { applicant: app.id }), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                setIsExpanded(false);
+            },
+        });
+    };
+
 
     return (
         <div className="bg-white border border-gray-100 rounded-lg shadow-xs hover:shadow-sm transition-all">
@@ -65,10 +85,20 @@ function CompactApplicationCard({ app }) {
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-yellow-50 text-yellow-700 border border-yellow-200 shadow-sm">
-                            <FaClock className="text-yellow-600 text-xs" />
-                            {app.status || 'Pending'}
+                        <span className={`inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full border shadow-sm
+                            ${app.status === 'approved'
+                                ? 'bg-green-50 text-green-700 border-green-200'
+                                : app.status === 'rejected'
+                                    ? 'bg-red-50 text-red-700 border-red-200'
+                                    : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                            }
+                        `}>
+                            {app.status === 'approved' && <FaCheckCircle className="text-green-600 text-xs" />}
+                            {app.status === 'rejected' && <FaTimesCircle className="text-red-600 text-xs" />}
+                            {!app.status || app.status === 'pending' ? <FaClock className="text-yellow-600 text-xs" /> : null}
+                            {app.status?.charAt(0).toUpperCase() + app.status.slice(1) || 'Pending'}
                         </span>
+
 
                         {isExpanded ? (
                             <FaChevronUp className="text-gray-400 text-xs" />
@@ -125,27 +155,47 @@ function CompactApplicationCard({ app }) {
                             )}
                         </div>
                     </div>
+                    {app.status === 'pending' && (
+                        <>
+                            <div className="pt-2">
+                                <label className="block text-xs font-medium text-gray-700 mb-2">ADMIN REMARKS</label>
+                                <textarea
+                                    className="w-full text-xs border border-gray-200 rounded-md p-2 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                                    rows="2"
+                                    placeholder="Add notes or comments (max 500 words)..."
+                                    value={data.admin_remarks}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const wordCount = value.trim().split(/\s+/).filter(Boolean).length;
+                                        if (wordCount <= 500) {
+                                            setData('admin_remarks', value);
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div className="flex justify-end gap-2 pt-2">
+                                <button
+                                    onClick={(e) => handleSubmit(e, 'approved')}
+                                    disabled={processing}
+                                    className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-md bg-green-100 text-green-700 border border-green-200 shadow-sm hover:bg-green-200 transition"
+                                >
+                                    <FaCheckCircle className="text-xs" />
+                                    Approve
+                                </button>
 
-                    <div className="pt-2">
-                        <label className="block text-xs font-medium text-gray-700 mb-2">ADMIN REMARKS</label>
-                        <textarea
-                            className="w-full text-xs border border-gray-200 rounded-md p-2 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
-                            rows="2"
-                            placeholder="Add notes or comments..."
-                            value={remarks}
-                            onChange={(e) => setRemarks(e.target.value)}
-                        />
-                    </div>
-                    <div className="flex justify-end gap-2 pt-2">
-                        <button className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-md bg-green-100 text-green-700 border border-green-200 shadow-sm hover:bg-green-200 transition">
-                            <FaCheckCircle className="text-xs" />
-                            Approve
-                        </button>
-                        <button className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-md bg-red-100 text-red-700 border border-red-200 shadow-sm hover:bg-red-200 transition">
-                            <FaTimesCircle className="text-xs" />
-                            Reject
-                        </button>
-                    </div>
+                                <button
+                                    onClick={(e) => handleSubmit(e, 'rejected')}
+                                    disabled={processing}
+                                    className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-md bg-red-100 text-red-700 border border-red-200 shadow-sm hover:bg-red-200 transition"
+                                >
+                                    <FaTimesCircle className="text-xs" />
+                                    Reject
+                                </button>
+
+                            </div>
+                        </>
+                    )}
+
                 </div>
             )}
         </div>
