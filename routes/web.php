@@ -15,27 +15,35 @@ Route::get('/', function () {
     ]);
 });
 
-// Default user dashboard
 Route::get('/dashboard', function () {
-    // Redirect based on role
-    if (Auth::check() && Auth::user()->role === 'admin') {
-        return redirect('/admin/dashboard');
+    if (Auth::check()) {
+        switch (Auth::user()->role) {
+            case 'admin':
+                return redirect('/admin/dashboard');
+            case 'instructor':
+                return redirect('/instructor/dashboard');
+        }
     }
 
-    return Inertia::render('Dashboard'); // user dashboard
+    return Inertia::render('Dashboard'); // default user or student
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Admin dashboard
 Route::get('/admin/dashboard', function () {
     return Inertia::render('Admin/Dashboard');
 })->middleware(['auth', 'verified', 'admin'])->name('admin.dashboard');
+
+// Instructor dashboard
+Route::get('/instructor/dashboard', function () {
+    return Inertia::render('Instructor/Dashboard');
+})->middleware(['auth', 'verified', 'instructor'])->name('instructor.dashboard');
        
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-// require __DIR__.'/manage_materials.php';
+require __DIR__.'/instructor.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/student.php';
 require __DIR__.'/auth.php';

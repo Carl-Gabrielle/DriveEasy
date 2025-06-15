@@ -34,21 +34,9 @@ export default function AdminLayout({ header, children }) {
                                         <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                                     </span>
                                 </NavLink>
-                                <NavLink
-                                    href={route('admin.course.approvals')}
-                                    active={route().current('admin.course.approvals')}
-                                    className="relative"
-                                >
-                                    <span className="inline-flex items-center gap-1">
-                                        Course Approvals
-                                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                    </span>
-                                </NavLink>
-                                <NavLink href={route('admin.schedule')} active={route().current('admin.schedule')}>
+
+                                <NavLink href={route('admin.schedules.index')} active={route().current('admin.schedules.index')}>
                                     Schedules
-                                </NavLink>
-                                <NavLink href={route('admin.performance')} active={route().current('admin.performance')}>
-                                    Performance Rating
                                 </NavLink>
                                 <NavLink
                                     href={route('admin.materials.index')}
@@ -162,21 +150,13 @@ export default function AdminLayout({ header, children }) {
                         >
                             Applicants
                         </ResponsiveNavLink>
+
                         <ResponsiveNavLink
-                            href={route('course.registration')} active={route().current('course.registration')}
-                        >
-                            Course Registration
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('schedule')} active={route().current('schedule')}
+                            href={route('admin.schedules.index')} active={route().current('admin.schedules.index')}
                         >
                             Schedule
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('performance')} active={route().current('performance')}
-                        >
-                            Performanece & Result
-                        </ResponsiveNavLink>
+
                         <ResponsiveNavLink
                             href={route('admin.materials.index')} active={route().current('admin.materials.index')}
                         >

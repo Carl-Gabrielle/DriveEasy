@@ -3,12 +3,11 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function Performance() {
-    const performanceStatus = 'failed';
+    const performanceStatus = 'passed';
 
     return (
         <AuthenticatedLayout>
             <Head title="Performance" />
-
             <div className="py-12">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="bg-white shadow-lg rounded-lg p-8">

@@ -5,7 +5,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function InstructorLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -13,33 +13,27 @@ export default function AuthenticatedLayout({ header, children }) {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white fixed w-full top-0 z-50">
+            <nav className="border-b border-gray-100 bg-white w-full fixed top-0 z-50 ">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
-                                <Link href="/dashboard">
+                                <Link href={route('admin.dashboard')}>
                                     {/* <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" /> */}
-                                    <h1 className='text-md font-bold text-blue-500'>DriveEasy</h1>
+                                    <h1 className='text-md font-bold text-indigo-600'>DriveEasy</h1>
                                 </Link>
                             </div>
-
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('student.applications')} active={route().current('student.applications')}>
-                                    Application
+                                <NavLink href={route('instructor.assignedStudents.index')} active={route().current('instructor.assignedStudents.index')}>
+                                    Assigned Students
                                 </NavLink>
-                                <NavLink href={route('course-registration.index')} active={route().current('course-registration.index')}>
-                                    Course Registration
+                                <NavLink href={route('instructor.evaluateStudents.index')} active={route().current('instructor.evaluateStudents.index')}>
+                                    Evaluate Students
                                 </NavLink>
-                                <NavLink href={route('schedule')} active={route().current('schedule')}>
-                                    Schedule
+                                <NavLink href={route('admin.performance')} active={route().current('admin.performance')}>
+                                    My Schedule
                                 </NavLink>
-                                <NavLink href={route('performance')} active={route().current('performance')}>
-                                    Performance Rating & Result
-                                </NavLink>
-                                <NavLink href={route('learning.materials')} active={route().current('learning.materials')}>
-                                    Learning Materials
-                                </NavLink>
+
                             </div>
                         </div>
 
@@ -139,29 +133,19 @@ export default function AuthenticatedLayout({ header, children }) {
                 >
                     <div className="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            href={route('application')} active={route().current('application')}
+                            href={route('instructor.assignedStudents.index')} active={route().current('instructor.assignedStudents.index')}
                         >
-                            Application
+                            Assigned Students
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            href={route('course-registration.index')} active={route().current('course-registration.index')}
+                            href={route('instructor.evaluateStudents.index')} active={route().current('instructor.evaluateStudents.index')}
                         >
-                            Course Registration
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('schedule')} active={route().current('schedule')}
-                        >
-                            Schedule
+                            Evaluate Students
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('performance')} active={route().current('performance')}
                         >
-                            Performanece & Result
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('learning.materials')} active={route().current('learning.materials')}
-                        >
-                            Learning Materials
+                            My Schedule
                         </ResponsiveNavLink>
                     </div>
 
@@ -189,7 +173,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
                     </div>
                 </div>
-            </nav>
+            </nav >
 
             {header && (
                 <header className="bg-white shadow">
@@ -197,9 +181,10 @@ export default function AuthenticatedLayout({ header, children }) {
                         {header}
                     </div>
                 </header>
-            )}
+            )
+            }
 
             <main className='mt-14'>{children}</main>
-        </div>
+        </div >
     );
 }

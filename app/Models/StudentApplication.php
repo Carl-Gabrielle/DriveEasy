@@ -23,4 +23,9 @@ class StudentApplication extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function courseRegistrations()
+{
+    return $this->hasMany(CourseRegistration::class);
+}
+
 }

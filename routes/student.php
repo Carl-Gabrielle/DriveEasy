@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\StudentLearningMaterialController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\CourseRegistrationController;
+
 
 Route::middleware(['auth', 'verified', 'student'])->group(function () {
     Route::get('/application', fn () =>
@@ -12,9 +14,7 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
     Route::get('/student/applications', [ApplicationController::class, 'index'])->name('student.applications');
     Route::post('/student/applications', [ApplicationController::class, 'store'])->name('student.applications.store');
 
-    Route::get('/course-registration', fn () =>
-        Inertia::render('Student/CourseRegistration')
-    )->name('course.registration');
+ Route::resource('course-registration', CourseRegistrationController ::class);
 
     Route::get('/schedule', fn () =>
         Inertia::render('Student/Schedule')

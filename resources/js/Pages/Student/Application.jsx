@@ -264,7 +264,7 @@ export default function Applications({ applications = [], success }) {
                                             {app.status === 'approved' && (
                                                 <div className='flex items-center justify-end mt-1'>
                                                     <a
-                                                        href={route('course.registration')}
+                                                        href={route('course-registration.index')}
                                                         className="inline-block mt-4  bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-indigo-700 transition"
                                                     >
                                                         Proceed to Course Registration
