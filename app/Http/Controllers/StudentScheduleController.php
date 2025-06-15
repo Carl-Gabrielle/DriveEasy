@@ -4,29 +4,29 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use App\Models\Schedule;
 
-class AssignedStudentsController extends Controller
+class StudentScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-  public function index()
+public function index()
 {
-    $instructor = Auth::user();
+    $user = Auth::user();
 
-    $students = Schedule::with([
-    'courseRegistration.studentApplication.user',
-])
-->where('instructor_id', $instructor->id)
-->get();
+    $schedules = Schedule::with(['instructor', 'courseRegistration.studentApplication'])
+        ->whereHas('courseRegistration.studentApplication', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+        ->latest()
+        ->get();
 
-
-    return Inertia::render('Instructor/AssignedStudents', [
-        'students' => $students,
+    return Inertia::render('Student/Schedule', [
+        'schedule' => $schedules,
     ]);
-}
-
+} 
 
     /**
      * Show the form for creating a new resource.

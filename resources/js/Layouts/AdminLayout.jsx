@@ -78,11 +78,11 @@ export default function AdminLayout({ header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link
+                                        {/* <Dropdown.Link
                                             href={route('profile.edit')}
                                         >
                                             Profile
-                                        </Dropdown.Link>
+                                        </Dropdown.Link> */}
                                         <Dropdown.Link
                                             href={route('logout')}
                                             method="post"
@@ -175,9 +175,9 @@ export default function AdminLayout({ header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
+                            {/* <ResponsiveNavLink href={route('profile.edit')}>
                                 Profile
-                            </ResponsiveNavLink>
+                            </ResponsiveNavLink> */}
                             <ResponsiveNavLink
                                 method="post"
                                 href={route('logout')}

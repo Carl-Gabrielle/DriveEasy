@@ -30,6 +30,7 @@ class User extends Authenticatable
 {
     return $this->hasOne(StudentApplication::class);
 }
+
     /**
      * The attributes that should be hidden for serialization.
      *

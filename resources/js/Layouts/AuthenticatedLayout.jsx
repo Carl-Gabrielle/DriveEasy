@@ -31,7 +31,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <NavLink href={route('course-registration.index')} active={route().current('course-registration.index')}>
                                     Course Registration
                                 </NavLink>
-                                <NavLink href={route('schedule')} active={route().current('schedule')}>
+                                <NavLink href={route('student-schedule.index')} active={route().current('student-schedule.index')}>
                                     Schedule
                                 </NavLink>
                                 <NavLink href={route('performance')} active={route().current('performance')}>
@@ -149,7 +149,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             Course Registration
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            href={route('schedule')} active={route().current('schedule')}
+                            href={route('student-schedule.index')} active={route().current('student-schedule.index')}
                         >
                             Schedule
                         </ResponsiveNavLink>

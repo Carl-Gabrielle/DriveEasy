@@ -30,10 +30,6 @@ export default function InstructorLayout({ header, children }) {
                                 <NavLink href={route('instructor.evaluateStudents.index')} active={route().current('instructor.evaluateStudents.index')}>
                                     Evaluate Students
                                 </NavLink>
-                                <NavLink href={route('admin.performance')} active={route().current('admin.performance')}>
-                                    My Schedule
-                                </NavLink>
-
                             </div>
                         </div>
 
@@ -65,11 +61,11 @@ export default function InstructorLayout({ header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link
+                                        {/* <Dropdown.Link
                                             href={route('profile.edit')}
                                         >
                                             Profile
-                                        </Dropdown.Link>
+                                        </Dropdown.Link> */}
                                         <Dropdown.Link
                                             href={route('logout')}
                                             method="post"
@@ -142,11 +138,7 @@ export default function InstructorLayout({ header, children }) {
                         >
                             Evaluate Students
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('performance')} active={route().current('performance')}
-                        >
-                            My Schedule
-                        </ResponsiveNavLink>
+
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
@@ -160,9 +152,9 @@ export default function InstructorLayout({ header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
+                            {/* <ResponsiveNavLink href={route('profile.edit')}>
                                 Profile
-                            </ResponsiveNavLink>
+                            </ResponsiveNavLink> */}
                             <ResponsiveNavLink
                                 method="post"
                                 href={route('logout')}

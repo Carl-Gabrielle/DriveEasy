@@ -80,7 +80,7 @@ export default function Dashboard() {
                         <ul className="space-y-4 text-gray-700">
                             <li className="flex items-start gap-3">
                                 <span className="text-indigo-600 mt-1">✔</span>
-                                <span>Manage your scheduled training sessions and reschedule as needed.</span>
+                                <span>Manage your scheduled training sessions.</span>
                             </li>
                             <li className="flex items-start gap-3">
                                 <span className="text-indigo-600 mt-1">✔</span>

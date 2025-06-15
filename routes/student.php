@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\StudentLearningMaterialController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CourseRegistrationController;
+use App\Http\Controllers\StudentScheduleController;
 
 
 Route::middleware(['auth', 'verified', 'student'])->group(function () {
@@ -16,9 +17,7 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
 
  Route::resource('course-registration', CourseRegistrationController ::class);
 
-    Route::get('/schedule', fn () =>
-        Inertia::render('Student/Schedule')
-    )->name('schedule');
+     Route::resource('student-schedule', StudentScheduleController ::class);
 
     Route::get('/performance', fn () =>
         Inertia::render('Student/Performance')
