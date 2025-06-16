@@ -11,21 +11,22 @@ class AssignedStudentsController extends Controller
     /**
      * Display a listing of the resource.
      */
-  public function index()
+public function index()
 {
     $instructor = Auth::user();
 
     $students = Schedule::with([
-    'courseRegistration.studentApplication.user',
-])
-->where('instructor_id', $instructor->id)
-->get();
-
+        'courseRegistration.studentApplication.user',
+    ])
+    ->where('instructor_id', $instructor->id)
+    ->where('status', 'pending') 
+    ->get();
 
     return Inertia::render('Instructor/AssignedStudents', [
         'students' => $students,
     ]);
 }
+
 
 
     /**

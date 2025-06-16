@@ -202,60 +202,62 @@ export default function Schedules({ instructors = [], registrations = [], schedu
                         </div>
                     ) : (
                         <div className="divide-y divide-gray-200">
-                            {schedules.map((item, index) => (
-                                <div key={index} className="p-6 hover:bg-gray-50 transition-colors duration-150">
-                                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="text-lg font-semibold text-gray-900 truncate">
-                                                {item.course_registration?.student_application?.user?.name}
-                                            </h3>
-                                            <p className="text-sm text-gray-500 mt-1">{item.description}</p>
-                                        </div>
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-sm">
-                                            <div className="flex items-center gap-2">
-                                                <div className="p-1.5 rounded-full bg-indigo-50 text-indigo-600">
-                                                    <HiOutlineBookOpen className="h-4 w-4" />
-                                                </div>
-                                                <span className="font-medium text-gray-700">  {item.course_registration?.course_type}</span>
+                            {schedules
+                                .filter(schedule => schedule.status === 'pending')
+                                .map((item, index) => (
+                                    <div key={index} className="p-6 hover:bg-gray-50 transition-colors duration-150">
+                                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="text-lg font-semibold text-gray-900 truncate">
+                                                    {item.course_registration?.student_application?.user?.name}
+                                                </h3>
+                                                <p className="text-sm text-gray-500 mt-1">{item.description}</p>
                                             </div>
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-sm">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="p-1.5 rounded-full bg-indigo-50 text-indigo-600">
+                                                        <HiOutlineBookOpen className="h-4 w-4" />
+                                                    </div>
+                                                    <span className="font-medium text-gray-700">  {item.course_registration?.course_type}</span>
+                                                </div>
 
-                                            <div className="flex items-center gap-2">
-                                                <div className="p-1.5 rounded-full bg-blue-50 text-blue-600">
-                                                    <HiOutlineUser className="h-4 w-4" />
+                                                <div className="flex items-center gap-2">
+                                                    <div className="p-1.5 rounded-full bg-blue-50 text-blue-600">
+                                                        <HiOutlineUser className="h-4 w-4" />
+                                                    </div>
+                                                    <span className="text-gray-700">{item.instructor?.name}</span>
                                                 </div>
-                                                <span className="text-gray-700">{item.instructor?.name}</span>
-                                            </div>
 
-                                            <div className="flex items-center gap-2">
-                                                <div className="p-1.5 rounded-full bg-green-50 text-green-600">
-                                                    <HiOutlineCalendarDays className="h-4 w-4" />
+                                                <div className="flex items-center gap-2">
+                                                    <div className="p-1.5 rounded-full bg-green-50 text-green-600">
+                                                        <HiOutlineCalendarDays className="h-4 w-4" />
+                                                    </div>
+                                                    <span className="text-gray-700">{new Date(item.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                                                 </div>
-                                                <span className="text-gray-700">{new Date(item.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                                            </div>
 
-                                            <div className="flex items-center gap-2">
-                                                <div className="p-1.5 rounded-full bg-yellow-50 text-yellow-600">
-                                                    <HiOutlineClock className="h-4 w-4" />
+                                                <div className="flex items-center gap-2">
+                                                    <div className="p-1.5 rounded-full bg-yellow-50 text-yellow-600">
+                                                        <HiOutlineClock className="h-4 w-4" />
+                                                    </div>
+                                                    <span className="text-gray-700">
+                                                        {new Date(item.created_at).toLocaleTimeString('en-PH', {
+                                                            timeZone: 'Asia/Manila',
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                            hour12: true,
+                                                        })}
+                                                    </span>
                                                 </div>
-                                                <span className="text-gray-700">
-                                                    {new Date(item.created_at).toLocaleTimeString('en-PH', {
-                                                        timeZone: 'Asia/Manila',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit',
-                                                        hour12: true,
-                                                    })}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-2 col-span-2 sm:col-span-3 md:col-span-1">
-                                                <div className="p-1.5 rounded-full bg-pink-50 text-pink-600">
-                                                    <HiOutlineMapPin className="h-4 w-4" />
+                                                <div className="flex items-center gap-2 col-span-2 sm:col-span-3 md:col-span-1">
+                                                    <div className="p-1.5 rounded-full bg-pink-50 text-pink-600">
+                                                        <HiOutlineMapPin className="h-4 w-4" />
+                                                    </div>
+                                                    <span className="text-gray-700 truncate">{item.location}</span>
                                                 </div>
-                                                <span className="text-gray-700 truncate">{item.location}</span>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
                         </div>
                     )}
                 </div>

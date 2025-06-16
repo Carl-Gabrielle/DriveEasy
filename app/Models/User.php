@@ -30,6 +30,15 @@ class User extends Authenticatable
 {
     return $this->hasOne(StudentApplication::class);
 }
+public function evaluationsGiven()
+{
+    return $this->hasMany(StudentEvaluation::class, 'evaluated_by');
+}
+
+public function evaluationsReceived()
+{
+    return $this->hasMany(StudentEvaluation::class, 'student_id');
+}
 
     /**
      * The attributes that should be hidden for serialization.

@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class StudentEvaluation extends Model
+{
+    use HasFactory;
+
+    protected $table = 'students_evaluations';
+
+  protected $fillable = [
+    'student_id',
+    'course_type',
+    'scores',
+    'total_score',
+    'remark',
+    'instructor_notes',
+];
+
+
+    protected $casts = [
+        'scores' => 'array',
+    ];
+
+    /**
+     * The student being evaluated (User with role: student)
+     */
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'student_id');
+    }
+ 
+    /**
+     * The instructor who evaluated the student (User with role: instructor)
+     */
+  
+}

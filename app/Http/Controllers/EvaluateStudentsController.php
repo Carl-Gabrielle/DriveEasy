@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use App\Models\StudentEvaluation;
+use App\Models\Schedule;
 
 class EvaluateStudentsController extends Controller
 {
@@ -28,26 +33,52 @@ class EvaluateStudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'student_id' => 'required|exists:users,id',
+        'course_type' => 'required|string|in:theoretical,practical',
+        'scores' => 'required|array',
+        'total_score' => 'required|integer',
+        'remark' => 'required|string',
+        'instructor_notes' => 'nullable|string',
+    ]);
+
+    StudentEvaluation::create($validated);
+
+    return back()->with('success', 'Evaluation saved!');
+}
+
+
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+public function show(Request $request, string $id)
+{
+    $selectedCourseType = $request->query('courseType'); 
+
+    $student = User::with([
+        'studentApplication.courseRegistrations' => function($query) {
+            $query->select('id', 'student_application_id', 'course_type');
+        }
+    ])->findOrFail($id);
+
+    return Inertia::render('Instructor/EvaluateStudents', [
+        'student' => $student->loadMissing('studentApplication.courseRegistrations'),
+        'courseType' => $selectedCourseType,
+        'success' => session('success'),
+    ]);
+}
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+   public function edit($id)
+{
+   //
+}
 
     /**
      * Update the specified resource in storage.

@@ -27,9 +27,9 @@ export default function InstructorLayout({ header, children }) {
                                 <NavLink href={route('instructor.assignedStudents.index')} active={route().current('instructor.assignedStudents.index')}>
                                     Assigned Students
                                 </NavLink>
-                                <NavLink href={route('instructor.evaluateStudents.index')} active={route().current('instructor.evaluateStudents.index')}>
+                                {/* <NavLink href={route('instructor.evaluateStudents.index')} active={route().current('instructor.evaluateStudents.index')}>
                                     Evaluate Students
-                                </NavLink>
+                                </NavLink> */}
                             </div>
                         </div>
 

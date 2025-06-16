@@ -16,6 +16,7 @@ class Schedule extends Model
         'date',
         'time',
         'location',
+        'status',
         'description',
     ];
 
