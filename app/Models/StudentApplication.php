@@ -27,5 +27,9 @@ class StudentApplication extends Model
 {
     return $this->hasMany(CourseRegistration::class);
 }
+public function evaluations()
+{
+    return $this->hasMany(StudentEvaluation::class);
+}
 
 }

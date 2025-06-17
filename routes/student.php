@@ -5,8 +5,9 @@ use Inertia\Inertia;
 use App\Http\Controllers\StudentLearningMaterialController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CourseRegistrationController;
+use App\Http\Controllers\PerformanceStudentResultController;
 use App\Http\Controllers\StudentScheduleController;
-
+use App\Http\Controllers\EvaluateStudentsController;
 
 Route::middleware(['auth', 'verified', 'student'])->group(function () {
     Route::get('/application', fn () =>
@@ -19,10 +20,12 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
 
      Route::resource('student-schedule', StudentScheduleController ::class);
 
-    Route::get('/performance', fn () =>
-        Inertia::render('Student/Performance')
-    )->name('performance');
+  Route::get('/student/Performance', [PerformanceStudentResultController::class, 'index'])->name('student.performance');
 
   Route::get('/learning-materials', [StudentLearningMaterialController::class, 'index'])
     ->name('learning.materials');
+      Route::post('/student/certificate/request', action: [PerformanceStudentResultController::class, 'requestCertificate'])
+        ->name('student.certificate.request');
+          Route::get('/certificate/download', [EvaluateStudentsController::class, 'downloadCertificate'])
+        ->name('certificate.download');
 });

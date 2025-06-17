@@ -44,9 +44,7 @@ export default function AdminLayout({ header, children }) {
                                 >
                                     Manage Materials
                                 </NavLink>
-                                <NavLink href={route('admin.certificates')} active={route().current('admin.certificates')}>
-                                    Certificates
-                                </NavLink>
+
                             </div>
                         </div>
 

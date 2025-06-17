@@ -23,7 +23,6 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <h1 className='text-md font-bold text-blue-500'>DriveEasy</h1>
                                 </Link>
                             </div>
-
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('student.applications')} active={route().current('student.applications')}>
                                     Application
@@ -34,7 +33,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <NavLink href={route('student-schedule.index')} active={route().current('student-schedule.index')}>
                                     Schedule
                                 </NavLink>
-                                <NavLink href={route('performance')} active={route().current('performance')}>
+                                <NavLink href={route('student.performance')} active={route().current('student.performance')}>
                                     Performance Rating & Result
                                 </NavLink>
                                 <NavLink href={route('learning.materials')} active={route().current('learning.materials')}>
@@ -154,7 +153,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             Schedule
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            href={route('performance')} active={route().current('performance')}
+                            href={route('student.performance')} active={route().current('student.performance')}
                         >
                             Performanece & Result
                         </ResponsiveNavLink>

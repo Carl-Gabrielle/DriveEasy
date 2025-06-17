@@ -19,6 +19,7 @@ class EvaluateStudentsController extends Controller
     return Inertia::render('Instructor/EvaluateStudents', [
             'students' => [], 
             'success' => session('success'),
+          
         ]);
     }
 
@@ -51,7 +52,6 @@ public function store(Request $request)
 }
 
 
-
     /**
      * Display the specified resource.
      */
@@ -71,6 +71,30 @@ public function show(Request $request, string $id)
         'success' => session('success'),
     ]);
 }
+public function downloadCertificate(Request $request)
+{
+    $courseType = $request->query('courseType');
+    $studentId = Auth::id();
+
+    $evaluation = StudentEvaluation::where('student_id', $studentId)
+        ->where('course_type', $courseType)
+        ->first();
+
+    if (!$evaluation) {
+        abort(404, 'Certificate not available.');
+    }
+
+    $pdf = app('dompdf.wrapper');
+    $pdf->loadView('certificate', [
+        'student' => Auth::user(),
+        'courseType' => $courseType,
+        'evaluation' => $evaluation
+    ]);
+
+   return $pdf->stream("Certificate-{$courseType}.pdf");
+
+}
+
 
     /**
      * Show the form for editing the specified resource.

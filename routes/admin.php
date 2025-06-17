@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\AdminApplicationController;
 use App\Http\Controllers\ManageMaterialController;
 use App\Http\Controllers\AdminScheduleController;
+use App\Http\Controllers\CertificateController;
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
@@ -21,5 +22,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
       Route::get('/certificates', fn () =>
         Inertia::render('Admin/Certificates')
     )->name('certificates');
+   Route::get('/certificates', [CertificateController::class, 'index'])->name('admin.certificates.index');
+    Route::post('/certificates/{id}/revoke', [CertificateController::class, 'revoke'])->name('admin.certificates.revoke');
+    Route::post('/certificates/{id}/reissue', [CertificateController::class, 'reissue'])->name('admin.certificates.reissue');
 
 });

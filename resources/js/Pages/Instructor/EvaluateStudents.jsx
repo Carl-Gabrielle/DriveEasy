@@ -3,7 +3,7 @@ import { Head, useForm, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-export default function EvaluateStudents({ student, courseType, errors }) {
+export default function EvaluateStudents({ student, courseType = '', errors }) {
     const normalizedCourseType = courseType.toLowerCase();
 
     const { data, setData, post, processing } = useForm({
@@ -85,7 +85,7 @@ export default function EvaluateStudents({ student, courseType, errors }) {
         );
 
         const totalScore = Object.values(processedScores).reduce((sum, score) => sum + score, 0);
-        const remark = totalScore >= 75 ? "PASSED" : "FAILED";
+        const remark = totalScore >= 80 ? "PASSED" : "FAILED";
         const notes = normalizedCourseType === 'theoretical' ? theoIntervention : practIntervention;
 
         if (totalScore === 0) {
@@ -101,6 +101,7 @@ export default function EvaluateStudents({ student, courseType, errors }) {
             remark: remark,
             instructor_notes: notes || null,
         });
+
 
         post(route('instructor.evaluateStudents.store'), {
             preserveScroll: true,

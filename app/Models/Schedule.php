@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
-
+    
+    
     protected $fillable = [
         'instructor_id',
         'course_registration_id',
@@ -35,4 +36,5 @@ class Schedule extends Model
     {
         return $this->belongsTo(User::class, 'instructor_id');
     }
+    
 }

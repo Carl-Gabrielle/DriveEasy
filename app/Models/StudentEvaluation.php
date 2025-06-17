@@ -32,9 +32,27 @@ class StudentEvaluation extends Model
     {
         return $this->belongsTo(User::class, 'student_id');
     }
- 
+public function schedule()
+{
+    return $this->belongsTo(Schedule::class);
+}
+public function courseRegistration()
+{
+    return $this->belongsTo(CourseRegistration::class);
+}
+
     /**
      * The instructor who evaluated the student (User with role: instructor)
      */
-  
+    
+  public function hasPassed()
+{
+    return $this->remark === 'Passed'; 
+}
+
+public function certificateUrl()
+{
+    return route('certificate.download', ['id' => $this->id]);
+}
+
 }
