@@ -15,15 +15,11 @@ class AdminScheduleController extends Controller
 public function index()
 {
     $instructors = User::where('role', 'instructor')->get(['id', 'name']);
-
     $registrations = CourseRegistration::with('studentApplication.user')->get();
-
-    $schedules = Schedule::with([
-            'instructor',
-            'courseRegistration.studentApplication.user.evaluationsReceived', 
-        ])
-        ->latest()
-        ->get();
+    $schedules = Schedule::with(['instructor', 'courseRegistration.studentApplication.user'])
+                    ->where('status', 'pending')
+                    ->latest()
+                    ->get();
 
     return Inertia::render('Admin/Schedules', [
         'success' => session('success'),
@@ -32,7 +28,6 @@ public function index()
         'schedules' => $schedules,
     ]);
 }
-
 
     /**
      * Show the form for creating a new resource.

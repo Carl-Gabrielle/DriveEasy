@@ -11,7 +11,7 @@ import {
     HiOutlineCheckCircle,
     HiOutlineXCircle
 } from 'react-icons/hi2';
-import { FaCar } from "react-icons/fa";
+
 export default function Schedules({ instructors = [], registrations = [], schedules = [], success }) {
     const { data, setData, post, reset, processing, errors } = useForm({
         instructor_id: '',
@@ -42,6 +42,8 @@ export default function Schedules({ instructors = [], registrations = [], schedu
             onSuccess: () => reset(),
         });
     };
+
+
     return (
         <AdminLayout>
             <Head title="Schedules" />
@@ -189,8 +191,8 @@ export default function Schedules({ instructors = [], registrations = [], schedu
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div className="p-6 border-b border-gray-200">
                         <h2 className="text-lg font-semibold text-gray-800">Existing Schedules</h2>
+                        <p className="text-sm text-gray-500 mt-1">{schedules.length} scheduled training sessions</p>
                     </div>
-
 
                     {schedules.length === 0 ? (
                         <div className="p-8 text-center">
@@ -201,15 +203,7 @@ export default function Schedules({ instructors = [], registrations = [], schedu
                     ) : (
                         <div className="divide-y divide-gray-200">
                             {schedules
-                                .filter((schedule) => {
-                                    const user = schedule.course_registration?.student_application?.user;
-                                    const evaluations = user?.evaluations_received || [];
-                                    const courseType = schedule.course_registration?.course_type;
-
-                                    return !evaluations.some(
-                                        (evaluation) => evaluation.course_type.toLowerCase() === courseType.toLowerCase()
-                                    );
-                                })
+                                .filter(schedule => schedule.status === 'pending')
                                 .map((item, index) => (
                                     <div key={index} className="p-6 hover:bg-gray-50 transition-colors duration-150">
                                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -221,21 +215,10 @@ export default function Schedules({ instructors = [], registrations = [], schedu
                                             </div>
                                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-sm">
                                                 <div className="flex items-center gap-2">
-                                                    <div className={`
-    p-1.5 rounded-full 
-    ${item.course_registration?.course_type === 'Practical'
-                                                            ? 'bg-green-100 text-green-800'
-                                                            : 'bg-indigo-50 text-indigo-600'}
-  `}>
-                                                        {item.course_registration?.course_type === 'Practical' ? (
-                                                            <FaCar className="h-4 w-4" />
-                                                        ) : (
-                                                            <HiOutlineBookOpen className="h-4 w-4" />
-                                                        )}
+                                                    <div className="p-1.5 rounded-full bg-indigo-50 text-indigo-600">
+                                                        <HiOutlineBookOpen className="h-4 w-4" />
                                                     </div>
-                                                    <span className="font-medium text-gray-700">
-                                                        {item.course_registration?.course_type}
-                                                    </span>
+                                                    <span className="font-medium text-gray-700">  {item.course_registration?.course_type}</span>
                                                 </div>
 
                                                 <div className="flex items-center gap-2">
@@ -249,13 +232,7 @@ export default function Schedules({ instructors = [], registrations = [], schedu
                                                     <div className="p-1.5 rounded-full bg-green-50 text-green-600">
                                                         <HiOutlineCalendarDays className="h-4 w-4" />
                                                     </div>
-                                                    <span className="text-gray-700">
-                                                        {new Date(item.created_at).toLocaleDateString('en-US', {
-                                                            month: 'long',
-                                                            day: 'numeric',
-                                                            year: 'numeric',
-                                                        })}
-                                                    </span>
+                                                    <span className="text-gray-700">{new Date(item.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                                                 </div>
 
                                                 <div className="flex items-center gap-2">
@@ -284,7 +261,6 @@ export default function Schedules({ instructors = [], registrations = [], schedu
                         </div>
                     )}
                 </div>
-
             </div>
         </AdminLayout>
     );
