@@ -33,6 +33,7 @@ Follow the steps below to set up the project locally:
 ### 1. Clone the Repository
 
 git clone <your-repo-link>
+<br>
 cd driveeasy
 
 ### 2.Install PHP Dependencies
@@ -43,18 +44,22 @@ cp .env.example .env
 
 ### 4. Run this to your terminal 
 php artisan  key:generate
+<br>
 php artisan migrate --seed
 
 ### 5. Install JS Dependencies 
 npm install 
+<br>
 npm install react-icons 
 
 ### 6. Install and Configure DomPDF
 composer require barryvdh/laravel-dompdf
+<br>
 php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
 
 ### 7. Install and Configure DomPDF
 php artisan serve
+<br>
 npm run dev 
 
 
