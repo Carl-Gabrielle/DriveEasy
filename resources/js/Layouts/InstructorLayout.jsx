@@ -61,11 +61,11 @@ export default function InstructorLayout({ header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        {/* <Dropdown.Link
-                                            href={route('profile.edit')}
+                                        <Dropdown.Link
+                                            href={route('instructor.profile.instructor')}
                                         >
                                             Profile
-                                        </Dropdown.Link> */}
+                                        </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route('logout')}
                                             method="post"
@@ -152,9 +152,9 @@ export default function InstructorLayout({ header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            {/* <ResponsiveNavLink href={route('profile.edit')}>
+                            <ResponsiveNavLink href={route('instructor.profile.instructor')}>
                                 Profile
-                            </ResponsiveNavLink> */}
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
                                 href={route('logout')}
