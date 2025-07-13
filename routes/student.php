@@ -10,9 +10,11 @@ use App\Http\Controllers\StudentScheduleController;
 use App\Http\Controllers\EvaluateStudentsController;
 
 Route::middleware(['auth', 'verified', 'student'])->group(function () {
+
     Route::get('/application', fn () =>
         Inertia::render('Student/Application')
     )->name('application');
+    
     Route::get('/student/applications', [ApplicationController::class, 'index'])->name('student.applications');
     Route::post('/student/applications', [ApplicationController::class, 'store'])->name('student.applications.store');
 
@@ -22,8 +24,7 @@ Route::middleware(['auth', 'verified', 'student'])->group(function () {
 
   Route::get('/student/Performance', [PerformanceStudentResultController::class, 'index'])->name('student.performance');
 
-  Route::get('/learning-materials', [StudentLearningMaterialController::class, 'index'])
-    ->name('learning.materials');
+  Route::get('/learning-materials', [StudentLearningMaterialController::class, 'index'])->name('learning.materials');
       Route::post('/student/certificate/request', action: [PerformanceStudentResultController::class, 'requestCertificate'])
         ->name('student.certificate.request');
           Route::get('/certificate/download', [EvaluateStudentsController::class, 'downloadCertificate'])

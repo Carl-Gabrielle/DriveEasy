@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('students_evaluations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->enum('course_type', ['theoretical', 'practical']);
             $table->json('scores');
             $table->decimal('total_score', 5, 2); 

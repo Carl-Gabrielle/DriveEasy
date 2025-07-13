@@ -107,7 +107,7 @@ export default function EvaluateStudents({ student, courseType = '', errors }) {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Evaluation submitted successfully!');
-
+                alert('Evaluation has been successfully submitted!');
                 setTheoreticalScores({
                     roadSigns: "",
                     trafficRules: "",

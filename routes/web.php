@@ -25,15 +25,15 @@ Route::get('/dashboard', function () {
         }
     }
 
-    return Inertia::render('Dashboard'); // default user or student
+    return Inertia::render('Dashboard'); 
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Admin dashboard
+
 Route::get('/admin/dashboard', function () {
     return Inertia::render('Admin/Dashboard');
 })->middleware(['auth', 'verified', 'admin'])->name('admin.dashboard');
 
-// Instructor dashboard
+
 Route::get('/instructor/dashboard', function () {
     return Inertia::render('Instructor/Dashboard');
 })->middleware(['auth', 'verified', 'instructor'])->name('instructor.dashboard');

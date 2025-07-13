@@ -17,8 +17,6 @@ class ManageMaterialController extends Controller
     public function index()
     {
         $materials = LearningMaterial::latest()->get(); 
-
-
         return Inertia::render('Admin/ManageMaterials', [
             'materials' => $materials,
             'success' => session('success'),
