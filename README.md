@@ -63,9 +63,15 @@ php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
 php artisan serve
 npm run dev 
 
-
-
-
+###  User Credentials
+Admin -> admin@example.com 
+password -> password123123
+```bash
+Instructor -> instructor@example.com 
+password -> password123123
+```bash
+Student  -> student@example.com 
+password -> password123123
 
 
 
