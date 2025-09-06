@@ -47,6 +47,7 @@ cp .env.example .env
 ```bash
 php artisan  key:generate
 php artisan migrate --seed
+php artisan storage:link
 
 ### 5. Install JS Dependencies 
 ```bash
@@ -58,7 +59,8 @@ npm install react-icons
 composer require barryvdh/laravel-dompdf
 php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
 
-### 7. Install and Configure DomPDF
+
+### 7. Run the server 
 ```bash
 php artisan serve
 npm run dev 
