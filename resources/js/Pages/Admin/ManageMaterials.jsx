@@ -135,23 +135,20 @@ export default function ManageMaterials({ materials = [], flash }) {
                                                             />
                                                         </svg>
                                                         <div className="flex text-sm text-gray-600">
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => document.getElementById('file-upload').click()}
-                                                                className="cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full p-2 text-left"
+                                                            <label
+                                                                htmlFor="file-upload"
+                                                                className="cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full p-2 text-center"
                                                             >
-                                                                <label htmlFor="file-upload" className="cursor-pointer">
-                                                                    Upload a file
-                                                                </label>
-                                                                <input
-                                                                    id="file-upload"
-                                                                    name="file-upload"
-                                                                    type="file"
-                                                                    accept="application/pdf"
-                                                                    onChange={(e) => setData('file', e.target.files[0])}
-                                                                    className="sr-only"
-                                                                />
-                                                            </button>
+                                                                Upload a file
+                                                            </label>
+                                                            <input
+                                                                id="file-upload"
+                                                                name="file-upload"
+                                                                type="file"
+                                                                accept="application/pdf"
+                                                                onChange={(e) => setData('file', e.target.files[0])}
+                                                                className="sr-only"
+                                                            />
                                                         </div>
                                                         <p className="text-xs text-gray-500">PDF up to 10MB</p>
                                                     </div>

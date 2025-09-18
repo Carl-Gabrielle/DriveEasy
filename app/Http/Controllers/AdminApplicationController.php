@@ -59,8 +59,12 @@ class AdminApplicationController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+
     public function update(Request $request, string $id)
+    
     {
+        // dd($request->all());
          $request->validate([
         'status' => 'required|in:approved,rejected',
         'admin_remarks' => 'nullable|string|max:500',

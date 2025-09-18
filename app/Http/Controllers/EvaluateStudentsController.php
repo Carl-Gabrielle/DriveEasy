@@ -37,17 +37,16 @@ class EvaluateStudentsController extends Controller
 
 public function store(Request $request)
 {
+    // dd($request->all());
     $validated = $request->validate([
         'student_id' => 'required|exists:users,id',
         'course_type' => 'required|string|in:theoretical,practical',
         'scores' => 'required|array',
         'total_score' => 'required|integer',
-        'remark' => 'required|string',
+        'remark' => 'string',
         'instructor_notes' => 'nullable|string',
     ]);
-
     StudentEvaluation::create($validated);
-
     return back()->with('success', 'Evaluation saved!');
 }
 

@@ -2,6 +2,7 @@ import InstructorLayout from '@/Layouts/InstructorLayout';
 import { Head, Link } from '@inertiajs/react';
 import { FiUser, FiCalendar, FiClock, FiMapPin, FiBook, FiGrid, FiList, FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { useState } from 'react';
+import { formatDate, formatTime } from '@/lib/dateFormatter';
 
 export default function AssignedStudents({ students }) {
     const [viewMode, setViewMode] = useState('list');
@@ -196,12 +197,7 @@ export default function AssignedStudents({ students }) {
                                                             </div>
                                                             <div className="text-indigo-600 truncate flex items-center">
                                                                 <FiClock className="mr-1" />
-                                                                {new Date(student.created_at).toLocaleTimeString('en-PH', {
-                                                                    timeZone: 'Asia/Manila',
-                                                                    hour: '2-digit',
-                                                                    minute: '2-digit',
-                                                                    hour12: true,
-                                                                })}
+                                                                {formatDate(student.created_at)}
                                                             </div>
                                                         </div>
                                                     );
@@ -256,21 +252,11 @@ export default function AssignedStudents({ students }) {
                                                             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2">
                                                                 <div className="flex items-center text-sm text-gray-500">
                                                                     <FiCalendar className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
-                                                                    {sessionDate.toLocaleDateString('en-US', {
-                                                                        weekday: 'short',
-                                                                        month: 'short',
-                                                                        day: 'numeric',
-                                                                        year: 'numeric'
-                                                                    })}
+                                                                    {formatDate(item.created_at)}
                                                                 </div>
                                                                 <div className="flex items-center text-sm text-gray-500">
                                                                     <FiClock className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
-                                                                    {new Date(item.created_at).toLocaleTimeString('en-PH', {
-                                                                        timeZone: 'Asia/Manila',
-                                                                        hour: '2-digit',
-                                                                        minute: '2-digit',
-                                                                        hour12: true,
-                                                                    })}
+                                                                    {formatTime(item.created_at)}
                                                                 </div>
                                                                 <div className="flex items-center text-sm text-gray-500">
                                                                     <FiMapPin className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />

@@ -45,6 +45,7 @@ cp .env.example .env
 
 ### 4. Run this to your terminal 
 ```bash
+php artisan storage:link
 php artisan  key:generate
 php artisan migrate --seed
 
@@ -52,6 +53,7 @@ php artisan migrate --seed
 ```bash
 npm install 
 npm install react-icons 
+npm install react-hot-toast
 
 ### 6. Install and Configure DomPDF
 ```bash
