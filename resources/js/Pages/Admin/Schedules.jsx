@@ -11,7 +11,7 @@ import {
     HiOutlineCheckCircle,
     HiOutlineXCircle
 } from 'react-icons/hi2';
-import ExistingSchedules from "@/Components/ExistingSchedules";
+import ExistingSchedules from '@/Components/sections/ExistingSchedules';
 import { formatDate, formatTime } from '@/lib/dateFormatter';
 import { groupByDate } from '@/utils/groupByDate';
 import toast, { Toaster } from 'react-hot-toast';
@@ -200,7 +200,6 @@ export default function Schedules({ instructors = [], registrations = [], schedu
                     selectedStudent={selectedStudent}
                     setSelectedStudent={setSelectedStudent}
                 />
-
             </div>
         </AdminLayout>
     );

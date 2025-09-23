@@ -4,7 +4,7 @@ import InstructorLayout from "@/Layouts/InstructorLayout";
 import { toast, Toaster } from 'react-hot-toast';
 import { FaPhone, FaMapMarkerAlt, FaBookOpen, FaCar } from "react-icons/fa";
 import { router } from "@inertiajs/react";
-import EvaluationSection from "@/Components/EvaluationSection";
+import EvaluationSection from "@/Components/sections/EvaluationSection";
 // --- CONFIGS ---
 const THEORETICAL_CRITERIA = [
     ["Road Traffic Signs and Markings", "roadSigns", 15],
@@ -114,7 +114,6 @@ export default function EvaluateStudents({ student, courseType = "", errors }) {
                 );
             },
         });
-
     };
 
     return (

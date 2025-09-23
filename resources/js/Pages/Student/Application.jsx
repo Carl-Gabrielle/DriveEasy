@@ -1,11 +1,11 @@
-import SubmittedApplication from '@/Components/SubmittedApplication';
+import SubmittedApplication from '@/Components/sections/SubmittedApplication';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { FaCheckCircle, FaUpload, FaUser, FaTimesCircle, FaClock } from 'react-icons/fa';
-import RequirementsList from '@/Components/RequirementsList';
-import StatusMessage from '@/Components/StatusMessage';
-import ApplicationForm from '@/Components/ApplicationForm';
+import RequirementsList from '@/Components/forms/RequirementsList';
+import StatusMessage from '@/Components/ui/StatusMessage';
+import ApplicationForm from '@/Components/forms/ApplicationForm';
 import { Toaster } from 'react-hot-toast';
 import { statusConfig } from '@/utils/statusConfig.jsx';
 

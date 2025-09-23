@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { IoDocumentOutline } from "react-icons/io5";
+import { toast, Toaster } from 'react-hot-toast';
 
 export default function ManageMaterials({ materials = [], flash }) {
     const { data, setData, post, reset, errors, progress } = useForm({
@@ -26,7 +27,14 @@ export default function ManageMaterials({ materials = [], flash }) {
         post(route('admin.materials.store'), {
             data: formData,
             forceFormData: true,
-            onSuccess: () => reset(),
+            onSuccess: () => {
+                reset(),
+                    toast.success('Material uploaded successfully!');
+            },
+            onError: (errors) => {
+                console.error(errors);
+                toast.error('Failed to upload material. Please check the form.');
+            },
         });
     };
 
@@ -50,6 +58,10 @@ export default function ManageMaterials({ materials = [], flash }) {
     return (
         <AdminLayout>
             <Head title="Manage Materials" />
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
             <div className="py-8">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-8">

@@ -16,7 +16,8 @@ class AdminApplicationController extends Controller
 {
     $applications = StudentApplication::with('user')
         ->latest()
-        ->get();
+        ->paginate(5);
+        // dd($applications->toArray());
 
     return Inertia::render('Admin/Applicants', [
         'applications' => $applications,

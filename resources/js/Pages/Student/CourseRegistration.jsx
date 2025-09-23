@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
+import InputLabel from '@/Components/ui/Input/InputLabel';
+import PrimaryButton from '@/Components/ui/Button/PrimaryButton';
 
 export default function CourseRegistration({ applicationStatus, courseStatus = {} }) {
     const { data, setData, post, processing, errors, reset } = useForm({

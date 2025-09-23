@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { toast } from "react-hot-toast";
-import FileUploadField from "@/Components/FileUploadField";
+import FileUploadField from "@/Components/forms/FileUploadField";
 
 export default function ApplicationForm({ applications, errors }) {
     const app = applications[0] || null;
