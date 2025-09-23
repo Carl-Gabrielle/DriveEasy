@@ -43,10 +43,8 @@ export default function ExistingSchedules({
                     {schedules.length} scheduled training sessions
                 </p>
             </div>
-
             <div className="bg-white rounded-xl border border-gray-200 shadow-xs">
                 <div className="grid grid-cols-1 lg:grid-cols-2 divide-x divide-y-0 divide-gray-100">
-                    {/* Theoretical Schedules Column */}
                     <div className="p-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="p-2 bg-indigo-50 rounded-lg">
@@ -223,6 +221,7 @@ export default function ExistingSchedules({
                                             <span className="text-xs text-gray-500">
                                                 {sched.students?.length || 0}/25 students
                                             </span>
+
                                         </div>
 
                                         <h4 className="font-semibold text-gray-900 text-sm truncate">
@@ -230,7 +229,6 @@ export default function ExistingSchedules({
                                         </h4>
                                     </div>
 
-                                    {/* Session Details */}
                                     <div className="p-4 space-y-3">
                                         <div className="flex items-center gap-3 text-sm text-gray-600">
                                             <div className="flex items-center gap-2 flex-1">
@@ -243,7 +241,6 @@ export default function ExistingSchedules({
                                             </div>
                                         </div>
 
-                                        {/* Instructor */}
                                         <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
                                             <div className="flex items-center justify-center w-8 h-8 bg-white border border-gray-200 rounded-full">
                                                 <HiOutlineUser className="h-4 w-4 text-gray-600" />
@@ -256,7 +253,6 @@ export default function ExistingSchedules({
                                             </div>
                                         </div>
 
-                                        {/* Students List */}
                                         <div>
                                             <div className="flex items-center justify-between mb-2">
                                                 <p className="text-xs font-medium text-gray-700 uppercase tracking-wide">

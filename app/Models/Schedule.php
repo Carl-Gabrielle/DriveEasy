@@ -38,15 +38,16 @@ class Schedule extends Model
     }
 
 
+
 public function students()
 {
     return $this->hasManyThrough(
-        User::class,                 
-        CourseRegistration::class,  
-        'id',                       
-        'id',                        
-        'course_registration_id',   
-        'student_application_id'    
+        User::class,
+        CourseRegistration::class,
+        'schedule_id',       
+        'id',               
+        'id',             
+        'user_id'  
     );
 }
 

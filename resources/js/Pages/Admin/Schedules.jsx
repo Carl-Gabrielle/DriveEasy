@@ -42,7 +42,6 @@ export default function Schedules({ instructors = [], registrations = [], schedu
 
     const handleTimeChange = (e) => {
         const selectedTime = e.target.value;
-
         if (selectedTime >= "08:00" && selectedTime <= "17:00") {
             setData("time", selectedTime);
         } else {

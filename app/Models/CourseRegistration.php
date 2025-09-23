@@ -30,4 +30,5 @@ class CourseRegistration extends Model
     {
         return $this->registration_status === 'approved';
     }
+    
 }
