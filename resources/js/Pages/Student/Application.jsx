@@ -1,176 +1,59 @@
+import SubmittedApplication from '@/Components/SubmittedApplication';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { FaCheckCircle, FaUpload, FaUser, FaTimesCircle, FaClock } from 'react-icons/fa';
+import RequirementsList from '@/Components/RequirementsList';
+import StatusMessage from '@/Components/StatusMessage';
+import ApplicationForm from '@/Components/ApplicationForm';
+import { Toaster } from 'react-hot-toast';
+import { statusConfig } from '@/utils/statusConfig.jsx';
+
 
 export default function Applications({ applications = [], success }) {
     const { errors } = usePage().props;
-
-    const requirements = [
-        "Clear scan or photo of the PSA/NSO Certificate of Live Birth (original and photocopy must be presented during the in-person transaction)",
-        "Clear scan or photo of a valid government-issued ID (original and photocopy must be presented during the in-person transaction)",
-        "If married: Clear scan or photo of the PSA Marriage Contract (original and photocopy must be presented during the in-person transaction)",
-        "One recent 2x2 ID picture (digital copy for upload; physical copy must be submitted in person)",
-    ];
-    const statusConfig = {
-        pending: {
-            bg: 'bg-yellow-50',
-            border: 'border-yellow-400',
-            text: 'text-yellow-800',
-            iconColor: 'text-yellow-500',
-            icon: (
-                <svg className="h-6 w-6 text-yellow-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 1010 10A10 10 0 0012 2z" />
-                </svg>
-            ),
-            title: "You've already submitted an application.",
-            message: "To make changes or updates, please contact support or wait for your application to be reviewed.",
-        },
-        approved: {
-            bg: 'bg-green-50',
-            border: 'border-green-400',
-            text: 'text-green-800',
-            iconColor: 'text-green-500',
-            icon: (
-                <svg className="h-6 w-6 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-            ),
-            title: 'Your application has been approved!',
-            message: "You're all set! Please proceed to Course Registration to enroll in your driving course.",
-        },
-        rejected: {
-            bg: 'bg-red-50',
-            border: 'border-red-400',
-            text: 'text-red-800',
-            iconColor: 'text-red-500',
-            icon: (
-                <svg className="h-6 w-6 text-red-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            ),
-            title: 'Your application has been rejected.',
-            message: 'Please review the feedback provided and consider resubmitting with the necessary adjustments.',
-        },
-    };
-    const status = app.status || 'pending';
-    const config = statusConfig[status];
-
-    const [married, setMarried] = useState(false);
-    const { data, setData, post, processing, reset } = useForm({
-        birthCertificate: null,
-        govId: null,
-        idPicture: null,
-        marriageContract: null,
-    });
-
-    const handleFileChange = (e) => {
-        setData(e.target.name, e.target.files[0]);
-    };
-
-    const handleMarriedChange = (e) => {
-        setMarried(e.target.checked);
-        if (!e.target.checked) setData('marriageContract', null);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        post(route('student.applications.store'), {
-            forceFormData: true,
-            onSuccess: () => {
-                reset();
-                setMarried(false);
-            }
-        });
-    };
-
+    const app = applications[0] || null;
     return (
         <AuthenticatedLayout>
             <Head title="Applications" />
+            <Toaster position="top-center" reverseOrder={false} />
             <div className="py-12">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center lg:text-left">
                         Application
                     </h1>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                        {!app ? (
+                            <RequirementsList title="Requirements Submission" />
+                        ) : app.status === 'rejected' ? (
+                            <RequirementsList
+                                title="Resubmit Your Documents"
+                                message="Your application was rejected. Please review the requirements and resubmit your documents."
+                            />
+                        ) : (
+                            <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow text-center">
+                                <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-50 rounded-full mb-6">
+                                    <FaCheckCircle className="text-emerald-600 h-10 w-10" />
+                                </div>
+
+                                <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+                                    Documents Submitted
+                                </h2>
+
+                                <p className="text-gray-600 mb-6 leading-relaxed">
+                                    Your application documents have been successfully submitted and are now in queue for review.
+                                </p>
+                            </div>
+                        )}
                         <div className="bg-white shadow-lg rounded-lg p-8">
                             <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-                                Requirements Submission
+                                {app ? (app.status === 'rejected' ? 'Resubmit Your Documents' : 'Application Status') : 'Submit Your Documents'}
                             </h2>
-                            <p className="text-gray-700 mb-6">
-                                Please prepare the following documents to complete your application:
-                            </p>
-                            <ul className="space-y-5">
-                                {requirements.map((req, index) => (
-                                    <li key={index} className="flex items-start gap-3">
-                                        <FaCheckCircle className="text-green-500 mt-1 h-6 w-6" />
-                                        <span className="text-gray-800">{req}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div className="bg-white shadow-lg rounded-lg p-8">
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-                                Submit Your Documents
-                            </h2>
-                            {applications.length === 0 ? (
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    <FileUploadField
-                                        label="Birth Certificate"
-                                        name="birthCertificate"
-                                        file={data.birthCertificate}
-                                        onChange={handleFileChange}
-                                        error={errors.birthCertificate}
-                                    />
-                                    <FileUploadField
-                                        label="Government ID"
-                                        name="govId"
-                                        file={data.govId}
-                                        onChange={handleFileChange}
-                                        error={errors.govId}
-                                    />
-                                    <FileUploadField
-                                        label="2x2 ID Picture"
-                                        name="idPicture"
-                                        file={data.idPicture}
-                                        onChange={handleFileChange}
-                                        error={errors.idPicture}
-                                    />
-                                    <div>
-                                        <label className="inline-flex items-center gap-2 font-medium text-gray-700">
-                                            <input
-                                                type="checkbox"
-                                                checked={married}
-                                                onChange={handleMarriedChange}
-                                                className="accent-indigo-600"
-                                            />
-                                            I am married
-                                        </label>
-                                        {married && (
-                                            <div className="mt-4">
-                                                <FileUploadField
-                                                    label="Marriage Contract"
-                                                    name="marriageContract"
-                                                    file={data.marriageContract}
-                                                    onChange={handleFileChange}
-                                                    error={errors.marriageContract}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="pt-4 text-right">
-                                        <button
-                                            type="submit"
-                                            disabled={processing}
-                                            className="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg shadow disabled:opacity-50 transition"
-                                        >
-                                            {processing ? 'Submitting...' : 'Submit Application'}
-                                        </button>
-                                    </div>
-                                </form>
+                            {!app ? (
+                                <ApplicationForm applications={applications} errors={errors} />
                             ) : applications[0].status === 'rejected' ? (
                                 <>
-                                    <div className={`${statusConfig.rejected.bg} ${statusConfig.rejected.border} ${statusConfig.rejected.text} p-4 rounded-md shadow-sm border-l-4`}>
+                                    <div className={`${statusConfig.rejected.bg} ${statusConfig.rejected.border} ${statusConfig.rejected.text} p-4 rounded-md shadow-sm border-l-4 `}>
                                         <div className="flex items-start gap-3">
                                             {statusConfig.rejected.icon}
                                             <div className="text-sm">
@@ -184,245 +67,16 @@ export default function Applications({ applications = [], success }) {
                                             </div>
                                         </div>
                                     </div>
-
-                                    <form onSubmit={handleSubmit} className="space-y-6 mt-6">
-                                        <FileUploadField
-                                            label="Birth Certificate"
-                                            name="birthCertificate"
-                                            file={data.birthCertificate}
-                                            onChange={handleFileChange}
-                                            error={errors.birthCertificate}
-                                        />
-                                        <FileUploadField
-                                            label="Government ID"
-                                            name="govId"
-                                            file={data.govId}
-                                            onChange={handleFileChange}
-                                            error={errors.govId}
-                                        />
-                                        <FileUploadField
-                                            label="2x2 ID Picture"
-                                            name="idPicture"
-                                            file={data.idPicture}
-                                            onChange={handleFileChange}
-                                            error={errors.idPicture}
-                                        />
-                                        <div>
-                                            <label className="inline-flex items-center gap-2 font-medium text-gray-700">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={married}
-                                                    onChange={handleMarriedChange}
-                                                    className="accent-indigo-600"
-                                                />
-                                                I am married
-                                            </label>
-                                            {married && (
-                                                <div className="mt-4">
-                                                    <FileUploadField
-                                                        label="Marriage Contract"
-                                                        name="marriageContract"
-                                                        file={data.marriageContract}
-                                                        onChange={handleFileChange}
-                                                        error={errors.marriageContract}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="pt-4 text-right">
-                                            <button
-                                                type="submit"
-                                                disabled={processing}
-                                                className="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg shadow disabled:opacity-50 transition"
-                                            >
-                                                {processing
-                                                    ? 'Submitting...'
-                                                    : applications[0]?.status === 'rejected'
-                                                        ? 'Resubmit Application'
-                                                        : 'Submit Application'}
-                                            </button>
-                                        </div>
-
-                                    </form>
+                                    <ApplicationForm applications={applications} errors={errors} />
                                 </>
                             ) : (
-                                (() => {
-                                    const app = applications[0];
-                                    const config = statusConfig[app.status] || statusConfig['pending'];
-                                    return (
-                                        <div className={`${config.bg} ${config.border} ${config.text} p-4 rounded-md shadow-sm border-l-4`}>
-                                            <div className="flex items-start justify-between gap-3">
-                                                <div className="flex items-start gap-3">
-                                                    {config.icon}
-                                                    <div className="text-sm">
-                                                        <p className="font-semibold">{config.title}</p>
-                                                        <p className="mt-1 text-gray-700">{config.message}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {app.status === 'approved' && (
-                                                <div className='flex items-center justify-end mt-1'>
-                                                    <a
-                                                        href={route('course-registration.index')}
-                                                        className="inline-block mt-4  bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-indigo-700 transition"
-                                                    >
-                                                        Proceed to Course Registration
-                                                    </a>
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })()
+                                <StatusMessage app={applications[0]} />
                             )}
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-                <section className="space-y-8">
-                    <h1 className="text-3xl font-bold text-gray-900">
-                        Submitted Application
-                    </h1>
-                    {applications.length > 0 ? (
-                        <div className="space-y-6">
-                            {applications.map((app) => (
-                                <div
-                                    key={app.id}
-                                    className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 overflow-hidden"
-                                >
-                                    <div className="p-6">
-                                        <div className='mb-6'>
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
-                                                    <FaUser className="text-sm" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-semibold text-gray-800">{app.user?.name || 'N/A'}</h3>
-                                                </div>
-                                            </div>
-                                            <p className="text-sm text-gray-500 flex items-center mt-1">
-                                                <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                                Submitted {new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                            </p>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 text-sm">
-                                            <div className="bg-gray-50 p-3 rounded-lg">
-                                                <p className="font-medium text-gray-500 mb-1">Contact</p>
-                                                <p className="text-gray-900 font-semibold">{app.user?.phone || 'N/A'}</p>
-                                            </div>
-                                            <div className="bg-gray-50 p-3 rounded-lg">
-                                                <p className="font-medium text-gray-500 mb-1">Address</p>
-                                                <p className="text-gray-900 font-semibold">{app.user?.address || 'N/A'}</p>
-                                            </div>
-                                            <div className="bg-gray-50 p-3 rounded-lg">
-                                                <p className="font-medium text-gray-500 mb-1">Status</p>
-                                                <span className={`inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full border shadow-sm
-                                                                           ${app.status === 'approved'
-                                                        ? 'bg-green-100 text-green-700 border-green-200'
-                                                        : app.status === 'rejected'
-                                                            ? 'bg-red-100 text-red-700 border-red-200'
-                                                            : 'bg-yellow-100 text-yellow-700 border-yellow-200'
-                                                    }
-                                                                       `}>
-                                                    {app.status === 'approved' && <FaCheckCircle className="text-green-600 text-xs" />}
-                                                    {app.status === 'rejected' && <FaTimesCircle className="text-red-600 text-xs" />}
-                                                    {!app.status || app.status === 'pending' ? <FaClock className="text-yellow-600 text-xs" /> : null}
-                                                    {app.status?.charAt(0).toUpperCase() + app.status.slice(1) || 'Pending'}
-                                                </span>
-                                            </div>
-                                            <div className="bg-gray-50 p-3 rounded-lg">
-                                                <p className="font-medium text-gray-500 mb-1">Account ID</p>
-                                                <p className="text-gray-900 font-mono font-semibold">#{app.user?.id}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="border-t border-gray-100 bg-gray-50 px-6 py-4">
-                                        <h4 className="text-sm font-medium text-gray-700 mb-3">Attached Documents</h4>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                            <ImageDisplay
-                                                label="Birth Certificate"
-                                                src={`/storage/${app.birth_certificate}`}
-                                                className="hover:ring-2 hover:ring-blue-200 transition-all"
-                                            />
-                                            <ImageDisplay
-                                                label="Government ID"
-                                                src={`/storage/${app.gov_id}`}
-                                                className="hover:ring-2 hover:ring-blue-200 transition-all"
-                                            />
-                                            <ImageDisplay
-                                                label="ID Picture"
-                                                src={`/storage/${app.id_picture}`}
-                                                isCircle
-                                                className="hover:ring-2 hover:ring-blue-200 transition-all"
-                                            />
-                                            {app.marriage_contract && (
-                                                <ImageDisplay
-                                                    label="Marriage Contract"
-                                                    src={`/storage/${app.marriage_contract}`}
-                                                    className="hover:ring-2 hover:ring-blue-200 transition-all"
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
-                            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            <h3 className="mt-2 text-lg font-medium text-gray-700">No applications submitted</h3>
-                        </div>
-                    )}
-                </section>
-            </div>
+            <SubmittedApplication applications={applications} />
         </AuthenticatedLayout >
-    );
-}
-
-function FileUploadField({ label, name, file, onChange, error }) {
-    return (
-        <div>
-            <label className="block font-medium text-gray-700 mb-1">{label}</label>
-            <div className="flex items-center gap-3 border-2 border-dashed border-gray-300 rounded-lg px-4 py-3 bg-gray-50 hover:bg-gray-100 transition">
-                <FaUpload className="text-indigo-500 text-lg" />
-                <span className="flex-grow text-sm text-gray-600 truncate">
-                    {file ? file.name : 'No file chosen'}
-                </span>
-                <input
-                    type="file"
-                    name={name}
-                    onChange={onChange}
-                    className="hidden"
-                    id={`file-${name}`}
-                />
-                <label
-                    htmlFor={`file-${name}`}
-                    className="cursor-pointer bg-indigo-100 text-indigo-700 text-sm px-3 py-1.5 rounded-md hover:bg-indigo-200 transition"
-                >
-                    Choose File
-                </label>
-            </div>
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-        </div>
-    );
-}
-
-function ImageDisplay({ label, src, isCircle = false }) {
-    return (
-        <div>
-            <p className="font-medium text-gray-700 mb-1">{label}:</p>
-            <img
-                src={src}
-                alt={label}
-                className={`${isCircle ? 'w-24 h-24 rounded-full' : 'w-40 h-auto rounded-md'} border shadow-sm object-cover`}
-            />
-        </div>
     );
 }

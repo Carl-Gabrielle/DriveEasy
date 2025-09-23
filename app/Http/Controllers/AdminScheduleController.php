@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Schedule;
 use App\Models\CourseRegistration;
+use Carbon\Carbon;
 
 class AdminScheduleController extends Controller
 {
@@ -14,12 +15,21 @@ class AdminScheduleController extends Controller
      */
 public function index()
 {
+    
     $instructors = User::where('role', 'instructor')->get(['id', 'name']);
     $registrations = CourseRegistration::with('studentApplication.user')->get();
-    $schedules = Schedule::with(['instructor', 'courseRegistration.studentApplication.user'])
-                    ->where('status', 'pending')
-                    ->latest()
-                    ->get();
+ $schedules = Schedule::with([
+        'instructor',
+        'courseRegistration.studentApplication.user',
+        'students' 
+    ])
+    
+    ->where('status', 'pending')
+    ->latest()
+    ->get();
+    // dd($schedules->toArray());
+
+
 
     return Inertia::render('Admin/Schedules', [
         'success' => session('success'),
@@ -40,9 +50,9 @@ public function index()
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
+public function store(Request $request)
 {
-
+    
     $validated = $request->validate([
         'instructor_id' => 'required|exists:users,id',
         'course_registration_id' => 'required|exists:course_registrations,id',
@@ -51,6 +61,10 @@ public function index()
         'location' => 'required|string|max:255',
         'description' => 'nullable|string',
     ]);
+
+    $dateTime = Carbon::parse($validated['date'].' '.$validated['time'], 'Asia/Manila');
+
+    $validated['time'] = $dateTime->format('H:i:s'); 
 
     Schedule::create($validated);
 

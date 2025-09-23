@@ -36,5 +36,19 @@ class Schedule extends Model
     {
         return $this->belongsTo(User::class, 'instructor_id');
     }
-    
+
+
+public function students()
+{
+    return $this->hasManyThrough(
+        User::class,                 
+        CourseRegistration::class,  
+        'id',                       
+        'id',                        
+        'course_registration_id',   
+        'student_application_id'    
+    );
+}
+
+
 }
