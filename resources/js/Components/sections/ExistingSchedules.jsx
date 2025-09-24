@@ -13,6 +13,8 @@ import {
     HiOutlineCog,
     HiOutlineChevronDown,
 } from "react-icons/hi2";
+import StudentDetailsCard from "../cards/StudentDetailsCard";
+import { formatDate } from "@/lib/dateFormatter";
 
 export default function ExistingSchedules({
     schedules,
@@ -22,6 +24,7 @@ export default function ExistingSchedules({
     setSelectedSchedule,
     selectedStudent,
     setSelectedStudent,
+    student,
 }) {
     const handleScheduleClick = (group) => {
         setSelectedSchedule(group);
@@ -33,6 +36,7 @@ export default function ExistingSchedules({
     };
     const [visibleCount, setVisibleCount] = useState(4);
     const [counter, setCounter] = useState(25);
+
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="p-6 border-b border-gray-200">
@@ -70,12 +74,7 @@ export default function ExistingSchedules({
                                         <div className="flex items-center gap-2">
                                             <HiOutlineCalendarDays className="h-4 w-4 text-gray-400" />
                                             <span className="font-medium text-gray-900">
-
-                                                {new Date(group.date).toLocaleDateString('en-US', {
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                    year: 'numeric'
-                                                })}
+                                                {formatDate(group.date)}
                                             </span>
                                         </div>
                                         <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${group.students.length >= 25
@@ -138,11 +137,7 @@ export default function ExistingSchedules({
                                         <div className="flex items-center gap-2">
                                             <HiOutlineCalendarDays className="h-4 w-4 text-gray-400" />
                                             <span className="font-medium text-gray-900">
-                                                {new Date(group.date).toLocaleDateString('en-US', {
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                    year: 'numeric'
-                                                })}
+                                                {formatDate(group.date)}
                                             </span>
                                         </div>
                                         <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${group.students.length >= 25
@@ -212,18 +207,23 @@ export default function ExistingSchedules({
                                 >
                                     <div className="px-4 py-3 border-b border-gray-100 bg-white rounded-t-lg">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${sched.students?.length >= 25
-                                                ? 'bg-red-100 text-red-800'
-                                                : 'bg-green-100 text-green-800'
-                                                }`}>
-                                                {sched.students?.length >= 25 ? 'Full' : 'Available'}
+                                            <span
+                                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition-colors 
+                                                 ${sched.course_registration?.course_status === 'not_started'
+                                                        ? 'bg-yellow-100 text-yellow-800'
+                                                        : sched.course_registration?.course_status === 'completed'
+                                                            ? 'bg-green-100 text-green-800'
+                                                            : 'bg-gray-100 text-gray-800'
+                                                    }`}
+                                            >
+                                                {sched.course_registration?.course_status === 'not_started' && 'Not Started'}
+                                                {sched.course_registration?.course_status === 'completed' && 'Completed'}
                                             </span>
+
                                             <span className="text-xs text-gray-500">
                                                 {sched.students?.length || 0}/25 students
                                             </span>
-
                                         </div>
-
                                         <h4 className="font-semibold text-gray-900 text-sm truncate">
                                             {sched.course_registration?.course_type}
                                         </h4>
@@ -254,7 +254,7 @@ export default function ExistingSchedules({
                                         </div>
 
                                         <div>
-                                            <div className="flex items-center justify-between mb-2">
+                                            {/* <div className="flex items-center justify-between mb-2">
                                                 <p className="text-xs font-medium text-gray-700 uppercase tracking-wide">
                                                     Students ({sched.students?.length || 0})
                                                 </p>
@@ -264,7 +264,7 @@ export default function ExistingSchedules({
                                                         Capacity Full
                                                     </span>
                                                 )}
-                                            </div>
+                                            </div> */}
 
                                             {!sched.students || sched.students.length === 0 ? (
                                                 <div className="text-center py-4 border-2 border-dashed border-gray-200 rounded-lg">
@@ -287,13 +287,8 @@ export default function ExistingSchedules({
                                                                     {student.name}
                                                                 </span>
                                                             </div>
-
-                                                            <div className="flex items-center space-x-1 ">
-                                                                <span className="text-xs text-indigo-600">View Details</span>
-                                                                <HiOutlineChevronRight className="h-3 w-3 text-indigo-600" />
-                                                            </div>
+                                                            <StudentDetailsCard student={student} />
                                                         </li>
-
                                                     ))}
                                                 </div>
                                             )}

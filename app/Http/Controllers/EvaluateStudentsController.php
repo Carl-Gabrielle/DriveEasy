@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\CourseRegistration;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -8,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\StudentEvaluation;
 use App\Models\Schedule;
+use App\Models\StudentApplication;
 
 class EvaluateStudentsController extends Controller
 {
@@ -34,21 +37,34 @@ class EvaluateStudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
 public function store(Request $request)
 {
-    // dd($request->all());
     $validated = $request->validate([
         'student_id' => 'required|exists:users,id',
         'course_type' => 'required|string|in:theoretical,practical',
         'scores' => 'required|array',
         'total_score' => 'required|integer',
-        'remark' => 'string',
+        'remark' => 'nullable|string',
         'instructor_notes' => 'nullable|string',
     ]);
-    StudentEvaluation::create($validated);
-    return back()->with('success', 'Evaluation saved!');
+
+    $evaluation = StudentEvaluation::create($validated);
+
+    $studentApplication = StudentApplication::where('user_id', $request->student_id)->first();
+
+    if ($studentApplication) {
+        $courseRegistration = CourseRegistration::where('student_application_id', $studentApplication->id)
+            ->where('course_type', $request->course_type)
+            ->first();
+
+        if ($courseRegistration) {
+            $courseRegistration->update(['course_status' => 'completed']);
+        }
+    }
+
+    return back()->with('success', 'Evaluation saved and course status updated!');
 }
+
 
 
     /**

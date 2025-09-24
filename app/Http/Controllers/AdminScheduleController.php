@@ -16,13 +16,22 @@ class AdminScheduleController extends Controller
     
 public function index()
 {
-    $instructors = User::where('role', 'instructor')->get(['id', 'name']);
+    $instructors = User::where('role', 'instructor')
+    ->select('id', 'name')
+    ->get();
 
-    $registrations = CourseRegistration::with('studentApplication.user')->get();
+  $registrations = CourseRegistration::with([
+        'studentApplication' => function ($q) {
+            $q->select('id', 'user_id')
+              ->with(['user:id,name']); 
+        }
+    ])
+    ->select('id', 'student_application_id', 'course_type', 'course_status')
+    ->get();
 
     $schedules = Schedule::with([
-        'instructor',
-        'courseRegistration.studentApplication.user'
+        'instructor:id,name',
+        'courseRegistration.studentApplication.user.studentEvaluations'
     ])
     ->where('status', 'pending')
     ->latest()

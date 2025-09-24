@@ -34,6 +34,11 @@ public function evaluationsGiven()
 {
     return $this->hasMany(StudentEvaluation::class, 'evaluated_by');
 }
+public function studentEvaluations()
+{
+    return $this->hasMany(StudentEvaluation::class, 'student_id');
+}
+
 
 public function evaluationsReceived()
 {

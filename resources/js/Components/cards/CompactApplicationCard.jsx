@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import ThumbnailImage from "@/Components/assets/ThumbnailImage";
+import { formatDate } from "@/lib/dateFormatter";
 
 export default function CompactApplicationCard({ app }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -61,9 +62,9 @@ export default function CompactApplicationCard({ app }) {
                         </div>
                         <div>
                             <h3 className="text-sm font-medium text-gray-800">{app.user?.name || 'N/A'}</h3>
-                            <p className="text-xs text-gray-500">{new Date(app.created_at).toLocaleDateString('en-US', {
-                                month: 'short', day: 'numeric', year: 'numeric'
-                            })}</p>
+                            <p className="text-xs text-gray-500">
+                                {formatDate(app.created_at)}
+                            </p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">

@@ -1,6 +1,7 @@
 import { Head, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { HiOutlineCalendarDays, HiOutlineClock, HiOutlineUser, HiOutlineMapPin } from 'react-icons/hi2';
+import { formatTime } from '@/lib/dateFormatter';
 
 export default function Schedule() {
     const { schedule } = usePage().props;
@@ -82,12 +83,7 @@ export default function Schedule() {
                                                             <div>
                                                                 <p className="text-xs text-gray-500 font-medium">Time</p>
                                                                 <p className="text-gray-900 font-medium">
-                                                                    {new Date(item.created_at).toLocaleTimeString('en-PH', {
-                                                                        timeZone: 'Asia/Manila',
-                                                                        hour: '2-digit',
-                                                                        minute: '2-digit',
-                                                                        hour12: true,
-                                                                    })}
+                                                                    {formatTime(item.created_at)}
                                                                 </p>
                                                             </div>
                                                         </div>
