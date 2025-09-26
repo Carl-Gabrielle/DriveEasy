@@ -1,10 +1,9 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
-import { FaUserCheck, FaClock, FaClipboardList, FaCertificate } from 'react-icons/fa';
+import { FaUserCheck, FaClock, FaClipboardList, FaCertificate, FaFileAlt, FaUsers, FaCalendarAlt } from 'react-icons/fa';
 export default function Dashboard() {
     const [greeting, setGreeting] = useState('');
-
     useEffect(() => {
         const now = new Date();
         const hours = now.getHours();
@@ -29,47 +28,27 @@ export default function Dashboard() {
                 <div className="max-w-7xl mx-auto">
                     <h1 className="text-3xl font-bold text-gray-800 mb-6">{greeting}</h1>
 
-                    {/* Overview Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        <div className="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-                            <div className="flex items-center space-x-4">
-                                <FaClipboardList className="text-indigo-600 text-2xl" />
-                                <div>
-                                    <p className="text-gray-600 text-sm">Pending Applications</p>
-                                    <p className="text-xl font-semibold text-gray-900">12</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-                            <div className="flex items-center space-x-4">
-                                <FaClock className="text-teal-600 text-2xl" />
-                                <div>
-                                    <p className="text-gray-600 text-sm">Upcoming Schedules</p>
-                                    <p className="text-xl font-semibold text-gray-900">5</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-                            <div className="flex items-center space-x-4">
-                                <FaUserCheck className="text-green-600 text-2xl" />
-                                <div>
-                                    <p className="text-gray-600 text-sm">Verified Students</p>
-                                    <p className="text-xl font-semibold text-gray-900">34</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-                            <div className="flex items-center space-x-4">
-                                <FaCertificate className="text-yellow-500 text-2xl" />
-                                <div>
-                                    <p className="text-gray-600 text-sm">Certificates Issued</p>
-                                    <p className="text-xl font-semibold text-gray-900">22</p>
-                                </div>
-                            </div>
-                        </div>
+                        <OverviewCards
+                            icon={<FaClipboardList className="text-indigo-600 text-2xl" />}
+                            title="Pending Applications"
+                            value="12"
+                        />
+                        <OverviewCards
+                            icon={<FaClock className="text-teal-600 text-2xl" />}
+                            title="Upcoming Schedules"
+                            value="5"
+                        />
+                        <OverviewCards
+                            icon={<FaUserCheck className="text-green-600 text-2xl" />}
+                            title="Verified Students"
+                            value="34"
+                        />
+                        <OverviewCards
+                            icon={<FaCertificate className="text-yellow-500 text-2xl" />}
+                            title="Certificates Issued"
+                            value="22"
+                        />
                     </div>
 
                     <div className="bg-white rounded-2xl shadow-lg p-8">
@@ -77,40 +56,58 @@ export default function Dashboard() {
                         <p className="text-gray-700 text-base leading-relaxed mb-6">
                             Manage and monitor every aspect of your driving school seamlessly through this comprehensive dashboard.
                         </p>
-                        <ul className="space-y-4 text-gray-700">
-                            <li className="flex items-start gap-3">
-                                <span className="text-indigo-600 mt-1">✔</span>
-                                <span>Review and verify student driver applications and submitted requirements.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <span className="text-indigo-600 mt-1">✔</span>
-                                <span>Approve registrations for both theoretical and practical courses.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <span className="text-indigo-600 mt-1">✔</span>
-                                <span>Assign training and examination schedules, with automated student notifications.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <span className="text-indigo-600 mt-1">✔</span>
-                                <span>Evaluate students based on handling, focus, and behavior criteria.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <span className="text-indigo-600 mt-1">✔</span>
-                                <span>Submit instructor feedback and generate e-certificates for successful students.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <span className="text-indigo-600 mt-1">✔</span>
-                                <span>Upload LTO reviewers in PDF format and link helpful YouTube driving tutorials.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <span className="text-indigo-600 mt-1">✔</span>
-                                <span>Provide targeted learning interventions for students who do not pass.</span>
-                            </li>
-                        </ul>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <SystemFeature
+                                icon={<FaUsers className="text-blue-600" />}
+                                title="Student Management"
+                                description="Review applications, verify requirements, and manage student records with progress tracking."
+                            />
+                            <SystemFeature
+                                icon={<FaCalendarAlt className="text-green-600" />}
+                                title="Schedule Management"
+                                description="Assign training and examination schedules with automated notifications."
+                            />
+                            <SystemFeature
+                                icon={<FaFileAlt className="text-purple-600" />}
+                                title="Course Approval"
+                                description="Approve registrations for theoretical and practical courses efficiently."
+                            />
+                            <SystemFeature
+                                icon={<FaCertificate className="text-orange-600" />}
+                                title="Certification"
+                                description="Track and issue certificates with complete history and verification."
+                            />
+                        </div>
                     </div>
 
                 </div>
             </div>
-        </AdminLayout>
+        </AdminLayout >
+    );
+}
+export function OverviewCards({ icon, title, value }) {
+    return (
+        <div className="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
+            <div className="flex items-center space-x-4">
+                {icon}
+                <div>
+                    <p className="text-gray-600 text-sm">{title}</p>
+                    <p className="text-xl font-semibold text-gray-900">{value}</p>
+                </div>
+            </div>
+        </div>
+    );
+}
+function SystemFeature({ icon, title, description }) {
+    return (
+        <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group">
+            <div className="p-3 bg-gray-100 rounded-lg group-hover:scale-110 transition-transform">
+                {icon}
+            </div>
+            <div>
+                <h4 className="font-semibold text-gray-900 mb-2">{title}</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+            </div>
+        </div>
     );
 }

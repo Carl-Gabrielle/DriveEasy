@@ -187,7 +187,7 @@ export default function EvaluateStudents({ student, courseType = "", errors }) {
                         {normalizedCourseType === "practical" && (
                             <EvaluationSection
                                 title="Practical Evaluation"
-                                icon={Car}
+                                icon={FaCar}
                                 color="from-green-600 to-green-800"
                                 criteria={PRACTICAL_CRITERIA}
                                 scores={practicalScores}
