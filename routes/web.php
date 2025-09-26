@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Schedule;
+use App\Models\StudentApplication;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -23,10 +25,23 @@ Route::get('/dashboard', function () {
             case 'instructor':
                 return redirect('/instructor/dashboard');
         }
+        $user = Auth::user();
+        $schedules = Schedule::with(['instructor', 'courseRegistration.studentApplication'])
+            ->whereHas('courseRegistration.studentApplication', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->latest()
+            ->get();
+              $application = StudentApplication::where('user_id', $user->id)->first();
+        return Inertia::render('Dashboard', [
+            'schedule' => $schedules,
+            'application' => $application,
+        ]);
     }
 
-    return Inertia::render('Dashboard'); 
+    return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 
 Route::get('/admin/dashboard', function () {

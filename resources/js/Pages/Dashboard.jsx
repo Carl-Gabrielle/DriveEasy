@@ -1,32 +1,70 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { FaCar } from 'react-icons/fa';
-import { Link, usePage } from '@inertiajs/react';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head, usePage } from "@inertiajs/react";
+import { FaCar, FaCalendarCheck, FaExclamationCircle } from "react-icons/fa";
+import DashboardHero from "@/Components/sections/DashboardHero";
+import StatusCard from "@/Components/cards/StatusCard";
+import UpcomingSchedule from "@/Components/sections/UpcomingSchedule";
+import { formatDate } from "@/lib/dateFormatter";
 
 export default function Dashboard() {
-    const user = usePage().props.auth.user;
+    const { auth, schedule = [], application = null } = usePage().props;
+    const user = auth.user;
+
+    const getSessionStatus = (sessionDate) => {
+        const now = new Date();
+        const sessionTime = new Date(sessionDate);
+        const timeDiff = sessionTime - now;
+        const hoursDiff = timeDiff / (1000 * 60 * 60);
+
+        if (hoursDiff < 24 && hoursDiff > 0) return "upcoming-today";
+        if (hoursDiff <= 0) return "completed";
+        return "upcoming";
+    };
+
     return (
         <AuthenticatedLayout>
             <Head title="Student Dashboard" />
-            <div className="py-12">
-                <div className="mx-auto max-w-4xl sm:px-6 lg:px-8">
-                    <div className="bg-white shadow-md sm:rounded-lg p-8 flex flex-col items-center  text-center">
-                        <FaCar className="text-indigo-600 w-14 h-14 mb-4" />
-                        <h1 className="text-3xl font-medium text-gray-900 mb-2">
-                            Welcome to DriveEasy  <span className='font-extrabold'> {user.name}</span>!
-                        </h1>
-                        <p className="text-gray-700 text-md max-w-2xl">
-                            You're almost ready to start your driving journey!  To get started, please complete your application by submitting the required documents on the Application page.
-                        </p>
-                        <div className="mt-6">
-                            <Link
-                                href={route('student.applications')}
-                                className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition"
-                            >
-                                Go to Application
-                            </Link>
-                        </div>
+            <div className="min-h-screen bg-gray-50 py-8">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-8">
+                    <DashboardHero user={user} />
+                </div>
+
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <StatusCard
+                            title="Application Status"
+                            value={application ? application.status.charAt(0).toUpperCase() + application.status.slice(1) : "Not Submitted"}
+                            icon={<FaExclamationCircle className="w-6 h-6 text-blue-500" />}
+                            color="blue"
+                            link={route("student.applications")}
+                            linkLabel="Go to Application"
+                        />
+
+                        <StatusCard
+                            title="Next Session"
+                            value={schedule.length > 0 ? formatDate(schedule[0].date) : "Not Scheduled"}
+                            icon={<FaCalendarCheck className="w-6 h-6 text-green-500" />}
+                            color="green"
+                            link={route("student-schedule.index")}
+                            linkLabel="View Schedule"
+                        />
+
+                        <StatusCard
+                            title="Course Progress"
+                            value="0%"
+                            icon={<FaCar className="w-6 h-6 text-purple-500" />}
+                            color="purple"
+                            progress={0}
+                        />
                     </div>
+                </div>
+
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <UpcomingSchedule
+                        schedule={schedule}
+                        formatDate={formatDate}
+                        getSessionStatus={getSessionStatus}
+                    />
                 </div>
             </div>
         </AuthenticatedLayout>

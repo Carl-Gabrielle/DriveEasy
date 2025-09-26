@@ -20,7 +20,6 @@ export default function StudentDetailsCard({ student }) {
         status = "failed";
     }
 
-
     return (
         <>
             <div

@@ -46,7 +46,9 @@ export default function Applications({ applications = [], success }) {
                             </div>
                         )}
                         <div className="bg-white shadow-lg rounded-lg p-8">
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+                            <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-3">
+                                <div className="w-2 h-8 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
+
                                 {app ? (app.status === 'rejected' ? 'Resubmit Your Documents' : 'Application Status') : 'Submit Your Documents'}
                             </h2>
                             {!app ? (

@@ -254,17 +254,7 @@ export default function ExistingSchedules({
                                         </div>
 
                                         <div>
-                                            {/* <div className="flex items-center justify-between mb-2">
-                                                <p className="text-xs font-medium text-gray-700 uppercase tracking-wide">
-                                                    Students ({sched.students?.length || 0})
-                                                </p>
-                                                {sched.students?.length >= 25 && (
-                                                    <span className="inline-flex items-center gap-1 text-xs text-red-600 font-medium">
-                                                        <HiOutlineXCircle className="h-3 w-3" />
-                                                        Capacity Full
-                                                    </span>
-                                                )}
-                                            </div> */}
+
 
                                             {!sched.students || sched.students.length === 0 ? (
                                                 <div className="text-center py-4 border-2 border-dashed border-gray-200 rounded-lg">
@@ -287,7 +277,7 @@ export default function ExistingSchedules({
                                                                     {student.name}
                                                                 </span>
                                                             </div>
-                                                            <StudentDetailsCard student={student} />
+                                                            <StudentDetailsCard student={student} courseType={sched.course_registration?.course_type} />
                                                         </li>
                                                     ))}
                                                 </div>
