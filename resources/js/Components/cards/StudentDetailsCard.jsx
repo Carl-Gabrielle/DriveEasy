@@ -8,9 +8,14 @@ import {
     HiOutlineClock
 } from "react-icons/hi";
 
-export default function StudentDetailsCard({ student }) {
+export default function StudentDetailsCard({ student, courseRegistration, courseType }) {
     const [open, setOpen] = useState(false);
-    const evaluation = student?.student_evaluations?.[0] || {};
+
+    const evaluation = courseRegistration?.evaluations?.find(
+        (ev) => ev.course_type?.toLowerCase() === courseType?.toLowerCase()
+    ) ?? null;
+    console.log("Card mounted", { student, courseRegistration, courseType });
+
     let status;
     if (!evaluation?.remark) {
         status = "pending";
@@ -58,6 +63,13 @@ export default function StudentDetailsCard({ student }) {
 
                         <div className="space-y-4 text-sm text-gray-700">
                             <div className="flex justify-between items-center border-b pb-3">
+                                <span className="font-medium">Course Type</span>
+                                <span className="font-semibold bg-gray-100 text-gray-800 px-3 py-1 rounded-lg">
+                                    {courseType ?? "N/A"}
+                                </span>
+                            </div>
+
+                            <div className="flex justify-between items-center border-b pb-3">
                                 <span className="font-medium flex items-center gap-2">
                                     <HiStar className="h-5 w-5 text-yellow-500" />
                                     Total Score
@@ -71,7 +83,7 @@ export default function StudentDetailsCard({ student }) {
                                 <span className="font-medium">Remark</span>
                                 <span
                                     className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium
-                                     ${status === "passed"
+                                        ${status === "passed"
                                             ? "bg-green-100 text-green-700"
                                             : status === "failed"
                                                 ? "bg-red-100 text-red-700"
@@ -96,6 +108,7 @@ export default function StudentDetailsCard({ student }) {
                                     )}
                                 </span>
                             </div>
+
                             <div>
                                 <span className="font-medium">Instructor Notes</span>
                                 <p className="mt-2 text-gray-600 leading-relaxed bg-gray-50 rounded-lg p-3">
@@ -108,13 +121,12 @@ export default function StudentDetailsCard({ student }) {
                             <button
                                 onClick={() => setOpen(false)}
                                 className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium shadow-sm 
-               hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 
-               focus:ring-indigo-500 focus:ring-offset-1 transition-all"
+                                    hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 
+                                    focus:ring-indigo-500 focus:ring-offset-1 transition-all"
                             >
                                 Close
                             </button>
                         </div>
-
                     </div>
                 </div>
             )}

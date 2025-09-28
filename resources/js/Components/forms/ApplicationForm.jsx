@@ -29,6 +29,10 @@ export default function ApplicationForm({ applications, errors }) {
                 toast.success("Application Submitted Successfully", { duration: 3000 });
                 setMarried(false);
             },
+            onError: (errors) => {
+                console.error(errors);
+                toast.error("Please fix the highlighted errors.");
+            },
         });
     };
 

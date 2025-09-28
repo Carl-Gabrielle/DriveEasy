@@ -30,5 +30,10 @@ class CourseRegistration extends Model
     {
         return $this->registration_status === 'approved';
     }
+     public function evaluations()
+{
+    return $this->hasMany(StudentEvaluation::class, 'course_registration_id');
+}
+
     
 }

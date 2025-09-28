@@ -14,7 +14,6 @@ export default function ManageMaterials({ materials = [], flash }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData();
-
         formData.append('title', data.title);
         formData.append('type', data.type);
 
@@ -23,7 +22,6 @@ export default function ManageMaterials({ materials = [], flash }) {
         } else {
             formData.append('link', data.link);
         }
-
         post(route('admin.materials.store'), {
             data: formData,
             forceFormData: true,

@@ -48,19 +48,30 @@ public function store(Request $request)
         'instructor_notes' => 'nullable|string',
     ]);
 
-    $evaluation = StudentEvaluation::create($validated);
-
     $studentApplication = StudentApplication::where('user_id', $request->student_id)->first();
 
-    if ($studentApplication) {
-        $courseRegistration = CourseRegistration::where('student_application_id', $studentApplication->id)
-            ->where('course_type', $request->course_type)
-            ->first();
-
-        if ($courseRegistration) {
-            $courseRegistration->update(['course_status' => 'completed']);
-        }
+    if (! $studentApplication) {
+        return back()->withErrors(['student_id' => 'No student application found for this user.']);
     }
+
+    $courseRegistration = CourseRegistration::where('student_application_id', $studentApplication->id)
+        ->where('course_type', $request->course_type)
+        ->first();
+
+    if (! $courseRegistration) {
+        return back()->withErrors(['course_type' => 'No course registration found for this student with the given type.']);
+    }
+
+    $alreadyEvaluated = StudentEvaluation::where('course_registration_id', $courseRegistration->id)->exists();
+    if ($alreadyEvaluated) {
+        return back()->withErrors(['course_registration_id' => 'This course registration has already been evaluated.']);
+    }
+
+    $validated['course_registration_id'] = $courseRegistration->id;
+
+    $evaluation = StudentEvaluation::create($validated);
+
+    $courseRegistration->update(['course_status' => 'completed']);
 
     return back()->with('success', 'Evaluation saved and course status updated!');
 }

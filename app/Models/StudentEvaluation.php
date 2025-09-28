@@ -14,6 +14,7 @@ class StudentEvaluation extends Model
   protected $fillable = [
     'student_id',
     'course_type',
+    'course_registration_id',
     'scores',
     'total_score',
     'remark',

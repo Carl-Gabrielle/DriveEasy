@@ -19,7 +19,7 @@ public function index()
     $instructors = User::where('role', 'instructor')
     ->select('id', 'name')
     ->get();
-
+    
   $registrations = CourseRegistration::with([
         'studentApplication' => function ($q) {
             $q->select('id', 'user_id')
@@ -30,12 +30,21 @@ public function index()
     ->get();
 
     $schedules = Schedule::with([
-        'instructor:id,name',
-        'courseRegistration.studentApplication.user.studentEvaluations'
-    ])
-    ->where('status', 'pending')
-    ->latest()
-    ->get();
+    'instructor:id,name',
+    'courseRegistration.evaluations' => function ($q) {
+        $q->whereNotNull('remark');   
+        $q->select('id', 'course_registration_id', 'course_type', 'total_score', 'remark', 'instructor_notes');
+    },
+     'courseRegistration.studentApplication' => function ($q) {
+        $q->select('id', 'user_id') 
+          ->with([
+              'user:id,name'
+          ]);
+    },
+])
+->where('status', 'pending')
+->latest()
+->get();
 
     $schedules->each(function ($schedule) {
         $schedule->students = collect([$schedule->courseRegistration->studentApplication->user]);
