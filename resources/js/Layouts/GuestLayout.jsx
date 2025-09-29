@@ -3,8 +3,8 @@ import { Link } from '@inertiajs/react';
 
 export default function GuestLayout({ children }) {
     return (
-        <div className="flex min-h-screen flex-col items-center bg-gradient-to-br from-slate-50 to-blue-50 pt-6 sm:justify-center sm:pt-0">
-            <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
+        <div className=" overflow-scroll sm:overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50 border  w-full">
+            <div className="grid  grid-cols-1 lg:grid-cols-2 gap-0   p-5">
                 {children}
             </div>
         </div>
