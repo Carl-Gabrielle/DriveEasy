@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExamController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AssignedStudentsController;
@@ -12,4 +13,6 @@ Route::middleware(['auth', 'verified', 'instructor'])->prefix('instructor')->nam
     Route::resource('assignedStudents', AssignedStudentsController::class);
     Route::resource('evaluateStudents',EvaluateStudentsController::class);
       Route::get('/profile', [ProfileController::class, 'instructor'])->name('profile.instructor');
+      Route::resource('exam', ExamController::class);
+
 });

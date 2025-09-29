@@ -39,6 +39,18 @@ public function studentEvaluations()
     return $this->hasMany(StudentEvaluation::class, 'student_id');
 }
 
+public function courseRegistrations()
+{
+    return $this->hasManyThrough(
+        CourseRegistration::class,   // Final model
+        StudentApplication::class,   // Intermediate model
+        'user_id',                   // FK on StudentApplication table
+        'student_application_id',    // FK on CourseRegistration table
+        'id',                        // Local key on users table
+        'id'                         // Local key on student_applications table
+    );
+}
+
 
 public function evaluationsReceived()
 {

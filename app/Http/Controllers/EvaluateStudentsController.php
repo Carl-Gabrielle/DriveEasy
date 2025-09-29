@@ -62,10 +62,10 @@ public function store(Request $request)
         return back()->withErrors(['course_type' => 'No course registration found for this student with the given type.']);
     }
 
-    $alreadyEvaluated = StudentEvaluation::where('course_registration_id', $courseRegistration->id)->exists();
-    if ($alreadyEvaluated) {
-        return back()->withErrors(['course_registration_id' => 'This course registration has already been evaluated.']);
-    }
+    // $alreadyEvaluated = StudentEvaluation::where('course_registration_id', $courseRegistration->id)->exists();
+    // if ($alreadyEvaluated) {
+    //     return back()->withErrors(['course_registration_id' => 'This course registration has already been evaluated.']);
+    // }
 
     $validated['course_registration_id'] = $courseRegistration->id;
 

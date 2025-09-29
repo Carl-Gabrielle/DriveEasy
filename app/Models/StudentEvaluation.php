@@ -55,5 +55,9 @@ public function certificateUrl()
 {
     return route('certificate.download', ['id' => $this->id]);
 }
+public function examAttempts()
+{
+    return $this->hasMany(ExamAttempt::class, 'student_id', 'student_id');
+}
 
 }
