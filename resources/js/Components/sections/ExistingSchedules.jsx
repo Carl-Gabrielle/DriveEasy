@@ -278,9 +278,9 @@ export default function ExistingSchedules({
                                                                 </span>
                                                             </div>
                                                             <StudentDetailsCard
-                                                                student={sched.course_registration?.student_application?.user}
+                                                                student={student}
                                                                 courseRegistration={sched.course_registration}
-                                                                courseType={sched.course_registration?.course_type}
+                                                                courseType={sched.course_registration?.evaluations?.[0]?.course_type}
                                                             />
                                                         </li>
                                                     ))}

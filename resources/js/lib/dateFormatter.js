@@ -19,3 +19,17 @@ export function formatTime(date) {
 export function formatDateTime(date) {
     return `${formatDate(date)} ${formatTime(date)}`;
 }
+
+export function isToday(date) {
+    const inputDate = new Date(date);
+    const today = new Date();
+
+    const inputManila = new Date(inputDate.toLocaleString("en-US", { timeZone: "Asia/Manila" }));
+    const todayManila = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Manila" }));
+
+    return (
+        inputManila.getFullYear() === todayManila.getFullYear() &&
+        inputManila.getMonth() === todayManila.getMonth() &&
+        inputManila.getDate() === todayManila.getDate()
+    );
+}

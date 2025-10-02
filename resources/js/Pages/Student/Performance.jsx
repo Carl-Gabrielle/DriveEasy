@@ -1,8 +1,165 @@
+import ScheduleCard from '@/Components/cards/ScheduleCard';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage } from '@inertiajs/react';
-
+import { Head, Link, usePage } from '@inertiajs/react';
+import { formatDate, formatTime, formatDateTime } from "@/lib/dateFormatter";
+import { HiOutlineCalendarDays } from 'react-icons/hi2';
+import { FaCalendarAlt, FaUserTie, FaMapMarkerAlt, FaClock, FaArrowRight, FaRegClock, FaBook, FaGraduationCap } from 'react-icons/fa';
+import { HiLockClosed, HiCheckCircle } from 'react-icons/hi';
+import { MdAccessTimeFilled, MdOutlineQuiz } from 'react-icons/md';
 export default function Performance() {
-    const { evaluations = {}, hasEvaluation = false } = usePage().props;
+    const { evaluations = [], hasEvaluation = false } = usePage().props;
+    const { examSchedule = [], hasExamSchedule = false } = usePage().props;
+
+    const now = new Date();
+    const renderExamCard = (examSchedule) => {
+        return (
+            examSchedule.length === 0 ? (
+                <div className="text-center py-12">
+                    <div className="mx-auto h-24 w-24 text-gray-300 mb-4">
+                        <HiOutlineCalendarDays className="w-full h-full opacity-50" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900">No sessions scheduled</h3>
+                    <p className="mt-2 text-gray-500 max-w-md mx-auto">
+                        You don't have any driving lessons scheduled yet.
+                    </p>
+                </div>
+            ) : (
+                <div className="space-y-4">
+                    {examSchedule.map((item, index) => {
+                        const scheduleDateTime = new Date(item.datetime);
+                        const isAvailable = now >= scheduleDateTime;
+                        return (
+                            <div key={index} className="group relative p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 mb-6 overflow-hidden">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600"></div>
+                                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
+                                    <div className="flex items-start space-x-4">
+                                        <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
+                                            <FaGraduationCap className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-indigo-700 transition-colors duration-300">
+                                                {item.course}
+                                            </h3>
+                                            <div className="flex items-center space-x-4 text-sm text-gray-500">
+                                                <span className="flex items-center">
+                                                    <MdOutlineQuiz className="w-4 h-4 mr-1 text-blue-500" />
+                                                    Exam Session
+                                                </span>
+                                                <span className="flex items-center">
+                                                    <FaRegClock className="w-4 h-4 mr-1 text-green-500" />
+                                                    {item.duration || '60 mins'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={`mt-4 lg:mt-0 px-4 py-2 rounded-full border ${isAvailable
+                                        ? 'bg-green-50 border-green-200 text-green-700'
+                                        : 'bg-amber-50 border-amber-200 text-amber-700'
+                                        }`}>
+                                        <div className="flex items-center space-x-2">
+                                            {isAvailable ? (
+                                                <>
+                                                    <HiCheckCircle className="w-4 h-4" />
+                                                    <span className="text-sm font-semibold">Ready to Start</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <HiLockClosed className="w-4 h-4" />
+                                                    <span className="text-sm font-semibold">Starts Soon</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <FaCalendarAlt className="w-5 h-5 text-blue-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Date</p>
+                                            <p className="text-sm font-medium text-gray-900">{formatDate(item.datetime)}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <div className="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                            <MdAccessTimeFilled className="w-5 h-5 text-purple-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Time</p>
+                                            <p className="text-sm font-medium text-gray-900">{formatTime(item.datetime)}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                            <FaUserTie className="w-5 h-5 text-green-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Instructor</p>
+                                            <p className="text-sm font-medium text-gray-900">{item.instructor}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <div className="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                            <FaMapMarkerAlt className="w-5 h-5 text-orange-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Location</p>
+                                            <p className="text-sm font-medium text-gray-900">{item.location}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-wrap gap-4 mb-6 text-sm">
+                                    <div className="bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+                                        <span className="font-semibold text-indigo-700">Questions:</span>
+                                        <span className="text-indigo-900 ml-1">{item.questions || '25'}</span>
+                                    </div>
+                                    <div className="bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100">
+                                        <span className="font-semibold text-blue-700">Passing Score:</span>
+                                        <span className="text-blue-900 ml-1">{item.passingScore || '80%'}</span>
+                                    </div>
+                                    <div className="bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                                        <span className="font-semibold text-emerald-700">Attempts:</span>
+                                        <span className="text-emerald-900 ml-1">{item.attempts || '2/3'}</span>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-200">
+                                    <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4 sm:mb-0">
+                                        <FaBook className="w-4 h-4 text-gray-400" />
+                                        <span>Make sure you're prepared before starting</span>
+                                    </div>
+
+                                    {isAvailable ? (
+                                        <Link
+                                            href={route('exam.show', item.id)}
+                                            className="group relative inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+                                        >
+                                            <span>Begin Exam</span>
+                                            <FaArrowRight className="ml-2 w-3 h-3 group-hover:translate-x-1 transition-transform duration-200" />
+                                            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        </Link>
+                                    ) : (
+                                        <button
+                                            disabled
+                                            className="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-gray-500 bg-gray-100 border border-gray-200 rounded-xl cursor-not-allowed"
+                                        >
+                                            <HiLockClosed className="w-4 h-4 mr-2" />
+                                            Available {item.availableFrom ? `from ${formatDate(item.availableFrom)}` : 'Soon'}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )
+        );
+    };
 
     if (!hasEvaluation || !evaluations || Object.keys(evaluations).length === 0) {
         return (
@@ -10,6 +167,7 @@ export default function Performance() {
                 <Head title="Performance" />
                 <div className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-gray-50 to-gray-100">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        {renderExamCard(examSchedule)}
                         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                             <div className="p-8 md:p-10 text-center">
                                 <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 mb-4">
@@ -42,6 +200,7 @@ export default function Performance() {
             </AuthenticatedLayout>
         );
     }
+
 
     const renderEvaluationCard = (evaluation, courseType) => {
         const performanceStatus = evaluation?.remark?.toLowerCase() === 'passed' ? 'passed' : 'failed';

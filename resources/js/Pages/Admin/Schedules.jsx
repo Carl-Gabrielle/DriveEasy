@@ -110,10 +110,9 @@ export default function Schedules({ instructors = [], registrations = [], schedu
                                         .filter(reg => !scheduledIds.has(reg.id))
                                         .map((reg) => (
                                             <option key={reg.id} value={reg.id}>
-                                                {reg.student_application?.user?.name} - {reg.course_type}
+                                                {reg.user?.name ?? 'No Student'} - {reg.course_type}
                                             </option>
                                         ))}
-
                                 </select>
                                 {errors.course_registration_id && <p className="text-red-500 text-xs mt-1">{errors.course_registration_id}</p>}
                             </div>

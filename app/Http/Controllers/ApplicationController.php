@@ -24,37 +24,31 @@ class ApplicationController extends Controller
 
     public function store(StoreStudentApplicationRequest $request)
 {
-$user = Auth::user();
+    $user = Auth::user();
+    $validated = $request->validated();
+
+    $data = [
+        'birth_certificate' => $validated['birthCertificate']->store('applications/birth_certificates', 'public'),
+        'gov_id' => $validated['govId']->store('applications/gov_ids', 'public'),
+        'id_picture' => $validated['idPicture']->store('applications/id_pictures', 'public'),
+        'marriage_contract' => isset($validated['marriageContract'])
+            ? $validated['marriageContract']->store('applications/marriage_contracts', 'public')
+            : null,
+        'status' => 'pending',
+    ];
 
     $existingApp = StudentApplication::where('user_id', $user->id)->first();
 
-    $birthCert = $request->file('birthCertificate')->store('applications/birth_certificates', 'public');
-    $govId = $request->file('govId')->store('applications/gov_ids', 'public');
-    $idPic = $request->file('idPicture')->store('applications/id_pictures', 'public');
-    $marriageContract = $request->hasFile('marriageContract')
-        ? $request->file('marriageContract')->store('applications/marriage_contracts', 'public')
-        : null;
+    if ($existingApp) {
+        $existingApp->update($data);
+        $message = 'Application updated successfully!';
+    } else {
+        $data['user_id'] = $user->id;
+        StudentApplication::create($data);
+        $message = 'Application submitted successfully!';
+    }
 
-   if ($existingApp) {
-    $existingApp->update([
-        'birth_certificate' => $birthCert,
-        'gov_id' => $govId,
-        'id_picture' => $idPic,
-        'marriage_contract' => $marriageContract,
-        'status' => 'pending',
-    ]);
-} else {
-    StudentApplication::create([
-        'user_id' => $user->id,
-        'birth_certificate' => $birthCert,
-        'gov_id' => $govId,
-        'id_picture' => $idPic,
-        'marriage_contract' => $marriageContract,
-    ]);
-}
-
-
-    return redirect()->route('student.applications')->with('success', $existingApp ? 'Application updated successfully!' : 'Application submitted successfully!');
+    return redirect()->route('student.applications')->with('success', $message);
 }
 
 }

@@ -44,7 +44,6 @@ export default function UpcomingSchedule({ schedule, formatDate, getSessionStatu
                                     item={item}
                                     formatDate={formatDate}
                                     status={status}
-                                    isActive={isActive}
                                 />
                             );
                         })}

@@ -14,5 +14,4 @@ Route::middleware(['auth', 'verified', 'instructor'])->prefix('instructor')->nam
     Route::resource('evaluateStudents',EvaluateStudentsController::class);
       Route::get('/profile', [ProfileController::class, 'instructor'])->name('profile.instructor');
       Route::resource('exam', ExamController::class);
-
 });

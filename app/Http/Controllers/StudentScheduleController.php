@@ -21,7 +21,30 @@ public function index()
             $query->where('user_id', $user->id);
         })
         ->latest()
-        ->get();
+        ->get()
+        ->map(function ($schedule) {
+              $courseType = $schedule->courseRegistration->course_type ?? null;
+               $instructor = $schedule->instructor 
+            ? [
+                'id' => $schedule->instructor->id,
+                'name' => $schedule->instructor->name,
+            ] 
+            : null;
+            return [
+                'course' => $schedule->courseRegistration->course_type,
+                'course_registration' => [
+                'id' => $schedule->courseRegistration->id ?? null,
+                'course_type' => $courseType,
+            ],
+                'date' => $schedule->date,
+                'time' => $schedule->time,
+              'instructor' => $instructor,
+                'location' => $schedule->location,
+                'description' => $schedule->description,
+            ];
+        });
+
+    // dd($schedules->toArray());
 
     return Inertia::render('Student/Schedule', [
         'schedule' => $schedules,

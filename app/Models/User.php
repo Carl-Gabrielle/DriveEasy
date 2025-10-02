@@ -26,6 +26,10 @@ class User extends Authenticatable
         'address',
         'password',
     ];
+       public function examAttempts()
+    {
+        return $this->hasMany(ExamAttempt::class, 'student_id', 'id');
+    }
  public function studentApplication()
 {
     return $this->hasOne(StudentApplication::class);

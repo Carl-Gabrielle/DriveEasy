@@ -4,18 +4,23 @@ import {
     HiOutlineUser,
     HiOutlineMapPin,
 } from "react-icons/hi2";
-import { formatTime } from "@/lib/dateFormatter";
+import { formatTime, isToday } from "@/lib/dateFormatter";
 
 export default function ScheduleCard({ item, formatDate, status, isActive }) {
+    const datetime = `${item.date}T${item.time}`;
+    const today = new Date();
+    const scheduleDate = new Date(item.date);
+    const todayBadge = isToday(datetime);
     return (
         <div
-            className={`relative rounded-xl border-2 p-5 transition-all duration-300 hover:shadow-md 
-        ${isActive ? "border-green-500 bg-green-50 animate-pulse" : "border-gray-100 bg-white"} 
-        ${status === "completed" ? "opacity-60" : ""}`}
+            className={`relative rounded-xl border-2 p-5 transition-all duration-300 hover:shadow-md
+    ${isToday ? "border-green-500 bg-green-100 animate-in" : "border-gray-100 bg-white"} 
+    ${status === "completed" ? "opacity-60" : ""}`}
         >
-            {isActive && (
+
+            {isToday && (
                 <div className="absolute -top-2 -right-2">
-                    <span className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-bounce">
+                    <span className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-ping ">
                         TODAY
                     </span>
                 </div>
@@ -32,14 +37,14 @@ export default function ScheduleCard({ item, formatDate, status, isActive }) {
                     <div className="text-center">
                         <HiOutlineCalendarDays
                             className={`h-8 w-8 mx-auto ${item.course_registration?.course_type === "Theoretical"
-                                    ? "text-blue-600"
-                                    : "text-orange-600"
+                                ? "text-blue-600"
+                                : "text-orange-600"
                                 }`}
                         />
                         <span
                             className={`text-xs font-bold mt-1 block ${item.course_registration?.course_type === "Theoretical"
-                                    ? "text-blue-600"
-                                    : "text-orange-600"
+                                ? "text-blue-600"
+                                : "text-orange-600"
                                 }`}
                         >
                             {item.course_registration?.course_type === "Theoretical"
@@ -53,8 +58,8 @@ export default function ScheduleCard({ item, formatDate, status, isActive }) {
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-3">
                         <h3
                             className={`text-lg font-bold ${item.course_registration?.course_type === "Theoretical"
-                                    ? "text-blue-700"
-                                    : "text-orange-700"
+                                ? "text-blue-700"
+                                : "text-orange-700"
                                 }`}
                         >
                             {item.course_registration?.course_type === "Theoretical"
@@ -71,9 +76,13 @@ export default function ScheduleCard({ item, formatDate, status, isActive }) {
                     <p className="text-gray-600 text-sm mb-4">{item.description}</p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <InfoRow icon={<HiOutlineCalendarDays />} label="Date" value={formatDate(item.date)} />
-                        <InfoRow icon={<HiOutlineClock />} label="Time" value={formatTime(item.created_at)} />
-                        <InfoRow icon={<HiOutlineUser />} label="Instructor" value={item.instructor?.name || "To be assigned"} />
+                        <InfoRow icon={<HiOutlineClock />} label="Time" value={formatTime(datetime)} />
+                        <InfoRow icon={<HiOutlineCalendarDays />} label="Date" value={formatDate(datetime)} />
+                        <InfoRow
+                            icon={<HiOutlineUser />}
+                            label="Instructor"
+                            value={item.instructor?.name || "To be assigned"}
+                        />
                         <InfoRow icon={<HiOutlineMapPin />} label="Location" value={item.location} />
                     </div>
                 </div>

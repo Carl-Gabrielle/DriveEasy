@@ -1,6 +1,6 @@
-import { useState } from "react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage, router } from "@inertiajs/react";
-import toast, { Toaster } from "react-hot-toast";
+import { useState } from "react";
 
 export default function TheoreticalExam({ student, questions, result, error, course_registration_id }) {
     const [answers, setAnswers] = useState({});
@@ -10,20 +10,21 @@ export default function TheoreticalExam({ student, questions, result, error, cou
     };
 
     const handleSubmit = () => {
-        router.post(route("instructor.exam.store"), {
-            student_id: student.id,
+        router.post(route("exam.store"), {
             course_registration_id,
             answers,
         });
+
     };
 
     return (
-        <>
-            <Head title={`Evaluate ${student?.name}`} />
+        <AuthenticatedLayout>
+            <Head title="Theoretical Exam" />
+
             <div className="p-6 space-y-6">
                 <h1 className="text-2xl font-bold">Theoretical Exam</h1>
                 <p className="text-gray-600">
-                    Student: {student.name} (ID: {student.id})
+                    Welcome, {student?.name} (ID: {student?.id})
                 </p>
 
                 {error && (
@@ -47,7 +48,8 @@ export default function TheoreticalExam({ student, questions, result, error, cou
                             <div className="p-4 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 shadow-sm">
                                 <p className="text-sm font-medium text-gray-500 mb-1">Score</p>
                                 <p className="text-2xl font-bold text-gray-800">
-                                    {result.score}<span className="text-sm font-normal text-gray-400">/{result.total}</span>
+                                    {result.score}
+                                    <span className="text-sm font-normal text-gray-400">/{result.total}</span>
                                 </p>
                             </div>
                             <div className="p-4 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 shadow-sm">
@@ -56,39 +58,50 @@ export default function TheoreticalExam({ student, questions, result, error, cou
                             </div>
                         </div>
 
-                        <div className={`inline-flex items-center px-4 py-2 rounded-full font-semibold text-sm ${result.status === "PASSED"
-                            ? "bg-green-50 text-green-700 border border-green-200"
-                            : "bg-red-50 text-red-700 border border-red-200"
-                            }`}>
-                            <div className={`w-2 h-2 rounded-full mr-2 ${result.status === "PASSED" ? "bg-green-500" : "bg-red-500"
-                                }`}></div>
+                        <div
+                            className={`inline-flex items-center px-4 py-2 rounded-full font-semibold text-sm ${result.status === "PASSED"
+                                ? "bg-green-50 text-green-700 border border-green-200"
+                                : "bg-red-50 text-red-700 border border-red-200"
+                                }`}
+                        >
+                            <div
+                                className={`w-2 h-2 rounded-full mr-2 ${result.status === "PASSED" ? "bg-green-500" : "bg-red-500"
+                                    }`}
+                            ></div>
                             {result.status}
                         </div>
 
-                        <div className={`p-4 rounded-xl ${result.status === "PASSED"
-                            ? "bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100"
-                            : "bg-gradient-to-r from-red-50 to-orange-50 border border-red-100"
-                            }`}>
+                        <div
+                            className={`p-4 rounded-xl ${result.status === "PASSED"
+                                ? "bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100"
+                                : "bg-gradient-to-r from-red-50 to-orange-50 border border-red-100"
+                                }`}
+                        >
                             <div className="flex items-center justify-center space-x-2">
                                 {result.status === "PASSED" ? (
                                     <>
                                         <div className="text-2xl">🎉</div>
-                                        <p className="font-semibold text-green-700">Congratulations on passing your exam!</p>
+                                        <p className="font-semibold text-green-700">
+                                            Congratulations on passing your exam!
+                                        </p>
                                     </>
                                 ) : (
                                     <>
                                         <div className="text-2xl">💪</div>
-                                        <p className="font-semibold text-red-700">Keep practicing - you'll get it next time!</p>
+                                        <p className="font-semibold text-red-700">
+                                            Keep practicing - you'll get it next time!
+                                        </p>
                                     </>
                                 )}
                             </div>
                         </div>
 
-                        {/* Progress bar for visual feedback */}
                         <div className="pt-2">
                             <div className="w-full bg-gray-200 rounded-full h-2">
                                 <div
-                                    className={`h-2 rounded-full transition-all duration-500 ${result.status === "PASSED" ? "bg-gradient-to-r from-green-400 to-emerald-500" : "bg-gradient-to-r from-red-400 to-orange-500"
+                                    className={`h-2 rounded-full transition-all duration-500 ${result.status === "PASSED"
+                                        ? "bg-gradient-to-r from-green-400 to-emerald-500"
+                                        : "bg-gradient-to-r from-red-400 to-orange-500"
                                         }`}
                                     style={{ width: `${result.percentage}%` }}
                                 ></div>
@@ -138,6 +151,6 @@ export default function TheoreticalExam({ student, questions, result, error, cou
                     </>
                 )}
             </div>
-        </>
+        </AuthenticatedLayout>
     );
 }

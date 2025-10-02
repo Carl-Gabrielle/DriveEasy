@@ -11,10 +11,15 @@ import {
 export default function StudentDetailsCard({ student, courseRegistration, courseType }) {
     const [open, setOpen] = useState(false);
 
-    const evaluation = courseRegistration?.evaluations?.find(
-        (ev) => ev.course_type?.toLowerCase() === courseType?.toLowerCase()
-    ) ?? null;
-    console.log("Card mounted", { student, courseRegistration, courseType });
+    const evaluation = courseRegistration?.evaluations?.[0] ?? null;
+
+    console.log("StudentDetailsCard data:", {
+        student,
+        courseRegistration,
+        courseType,
+        evaluation
+    });
+
 
     let status;
     if (!evaluation?.remark) {

@@ -34,7 +34,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Schedule
                                 </NavLink>
                                 <NavLink href={route('student.performance')} active={route().current('student.performance')}>
-                                    Performance Rating & Result
+                                    Exam & Results
                                 </NavLink>
                                 <NavLink href={route('learning.materials')} active={route().current('learning.materials')}>
                                     Learning Materials

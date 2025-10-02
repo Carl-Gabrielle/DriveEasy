@@ -21,10 +21,15 @@ class ExamAttempt extends Model
      */
 
     // An attempt belongs to a student (User)
-    public function student()
+    // public function examAttempts()
+    // {
+    //     return $this->hasMany(ExamAttempt::class, 'student_id', 'id');
+    // }
+     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');
     }
+
     public function evaluation()
 {
     return $this->hasOne(StudentEvaluation::class, 'student_id', 'student_id');

@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin'=>AdminMiddleware::class,
             'student' => \App\Http\Middleware\StudentMiddleware::class,
             'instructor' => \App\Http\Middleware\InstructorMiddleware::class,
+            'check.exam.schedule' => \App\Http\Middleware\CheckExamSchedule::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

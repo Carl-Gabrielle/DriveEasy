@@ -20,6 +20,7 @@ export default function Dashboard() {
         if (hoursDiff <= 0) return "completed";
         return "upcoming";
     };
+    // console.log("Schedule data:", schedule);
 
     return (
         <AuthenticatedLayout>

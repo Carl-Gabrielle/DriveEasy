@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\StoreScheduleRequest;
+use App\Http\Resources\CourseRegistrationResource;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -19,20 +21,12 @@ public function index()
     $instructors = User::where('role', 'instructor')
     ->select('id', 'name')
     ->get();
-    
-  $registrations = CourseRegistration::with([
-        'studentApplication' => function ($q) {
-            $q->select('id', 'user_id')
-              ->with(['user:id,name']); 
-        }
-    ])
-    ->select('id', 'student_application_id', 'course_type', 'course_status')
-    ->get();
+    $registrations = CourseRegistration::with('studentApplication.user')->get();
 
     $schedules = Schedule::with([
     'instructor:id,name',
     'courseRegistration.evaluations' => function ($q) {
-        $q->whereNotNull('remark');   
+        // $q->whereNotNull('remark');   
         $q->select('id', 'course_registration_id', 'course_type', 'total_score', 'remark', 'instructor_notes');
     },
      'courseRegistration.studentApplication' => function ($q) {
@@ -42,7 +36,6 @@ public function index()
           ]);
     },
 ])
-->where('status', 'pending')
 ->latest()
 ->get();
 
@@ -54,7 +47,7 @@ public function index()
 
     return Inertia::render('Admin/Schedules', [
         'instructors' => $instructors,
-        'registrations' => $registrations,
+          'registrations' => CourseRegistrationResource::collection($registrations)->resolve(),
         'schedules' => $schedules,
     ]);
 }
@@ -71,17 +64,9 @@ public function index()
     /**
      * Store a newly created resource in storage.
      */
-public function store(Request $request)
+public function store(StoreScheduleRequest $request)
 {
-    
-    $validated = $request->validate([
-        'instructor_id' => 'required|exists:users,id',
-        'course_registration_id' => 'required|exists:course_registrations,id',
-        'date' => 'required|date',
-        'time' => 'required',
-        'location' => 'required|string|max:255',
-        'description' => 'nullable|string',
-    ]);
+    $validated =$request->validated();
 
     $dateTime = Carbon::parse($validated['date'].' '.$validated['time'], 'Asia/Manila');
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CourseRegistration;
 use App\Models\ExamAttempt;
 use App\Models\ExamQuestion;
 use App\Models\StudentEvaluation;
@@ -27,88 +28,118 @@ class ExamController extends Controller
     /**
      * Store a newly created resource in storage.
      */
- public function store(Request $request)
+public function store(Request $request)
 {
     $request->validate([
-        'student_id' => 'required|exists:users,id',
+        'course_registration_id' => 'required|exists:course_registrations,id',
         'answers' => 'required|array',
     ]);
 
-    $studentId = $request->student_id;
+    $student = Auth::user();
 
-    $latestAttempt = ExamAttempt::where('student_id', $studentId)
-        ->orderByDesc('created_at')
+    $courseRegistration = CourseRegistration::with('studentApplication')
+        ->where('id', $request->course_registration_id)
+        ->whereHas('studentApplication', function ($query) use ($student) {
+            $query->where('user_id', $student->id);
+        })
         ->first();
 
-    if ($latestAttempt && $latestAttempt->status === 'PASSED') {
-        return redirect()
-            ->route('instructor.exam.show', $studentId)
-            ->with('error', 'You already passed the exam.');
+    if (!$courseRegistration) {
+        return redirect()->back()->with('error', 'Course registration not found for this student.');
     }
 
-    if ($latestAttempt && $latestAttempt->status === 'FAILED') {
-        return redirect()
-            ->route('instructor.exam.show', $studentId)
-            ->with('error', 'You already failed this attempt. Please pay for a retake.');
+    if ($courseRegistration->course_type !== 'Theoretical') {
+        return redirect()->back()->with('error', 'This exam is only available for theoretical courses.');
     }
 
-    $answers = $request->answers;
-    $score = 0;
-    $totalPoints = 0;
+    $questions = ExamQuestion::all();
+    if ($questions->isEmpty()) {
+        return redirect()->back()->with('error', 'No questions found for this exam.');
+    }
 
-    foreach ($answers as $questionId => $answer) {
-        $question = ExamQuestion::find($questionId);
-        if (!$question) continue;
+    $scores = [];
+    $totalPoints = $questions->sum('points');
+    $earnedPoints = 0;
 
-        $totalPoints += $question->points;
-        if ($answer === $question->correct_answer) {
-            $score += $question->points;
+    foreach ($questions as $question) {
+        $submittedAnswer = $request->answers[$question->id] ?? null;
+        $isCorrect = $submittedAnswer === $question->correct_answer;
+
+        $scores[$question->id] = [
+            'submitted' => $submittedAnswer,
+            'correct' => $isCorrect,
+        ];
+
+        if ($isCorrect) {
+            $earnedPoints += $question->points;
         }
     }
 
-    $percentage = $totalPoints > 0 ? ($score / $totalPoints) * 100 : 0;
-    $status = $percentage >= 80 ? 'PASSED' : 'FAILED';
+    $percentage = $totalPoints > 0 ? ($earnedPoints / $totalPoints) * 100 : 0;
+    $status = $percentage >= 75 ? 'PASSED' : 'FAILED';
 
-    $attempt = ExamAttempt::create([
-        'student_id' => $studentId,
-        'score' => $score,
+    $latestAttempt = ExamAttempt::where('student_id', $student->id)
+        ->orderByDesc('created_at')
+        ->first();
+    $attemptNumber = $latestAttempt ? $latestAttempt->attempt_number + 1 : 1;
+
+    ExamAttempt::create([
+        'student_id' => $student->id,
+        'score' => $earnedPoints,
         'status' => $status,
-        'attempt_number' => $latestAttempt ? $latestAttempt->attempt_number + 1 : 1,
+        'attempt_number' => $attemptNumber,
     ]);
-    
-        StudentEvaluation::updateOrCreate(
-    [
-        'student_id' => $studentId,
-        'course_type' => 'theoretical',
-        'course_registration_id' => $request->course_registration_id ?? null,
-    ],
-    [
-        'scores' => $answers,
-        'total_score' => $totalPoints,
-        'remark' => $status === 'PASSED' ? 'Passed' : 'Failed',
-        'instructor_notes' => $status === 'PASSED'
-            ? 'Student passed theoretical exam.'
-            : 'Student failed. Retake required.',
-    ]
-);
-    return redirect()
-        ->route('instructor.exam.show', $studentId)
-        ->with('result', [
-            'score' => $score,
+
+    StudentEvaluation::updateOrCreate(
+        [
+            'student_id' => $student->id,
+            'course_registration_id' => $courseRegistration->id,
+        ],
+        [
+            'instructor_notes' => $status === 'PASSED'
+                ? 'Student passed theoretical exam.'
+                : 'Student failed. Retake required.',
+            'course_type' => $courseRegistration->course_type,
+            'scores' => $scores,
+            'total_score' => $earnedPoints,
+            'remark' => $status,
+        ]
+    );
+
+    return redirect()->back()->with([
+        'result' => [
+            'score' => $earnedPoints,
             'total' => $totalPoints,
             'percentage' => round($percentage, 2),
             'status' => $status,
-        ]);
+        ]
+    ]);
 }
+
+
+
+
 
 
     /**
      * Display the specified resource.
      */
-   public function show($studentId)
+
+
+public function show()
 {
-    $student = User::findOrFail($studentId);
-$courseRegistration = $student->courseRegistrations()->latest()->first();
+    $studentId = Auth::id();
+    $student   = Auth::user();
+
+    // Get the latest theoretical course registration
+    $courseRegistration = $student->courseRegistrations()
+        ->where('course_type', 'Theoretical')
+        ->latest()
+        ->first();
+
+    if (!$courseRegistration) {
+        return redirect()->back()->with('error', 'No theoretical course registration found.');
+    }
 
     $latestAttempt = ExamAttempt::where('student_id', $studentId)
         ->orderByDesc('created_at')
@@ -117,28 +148,33 @@ $courseRegistration = $student->courseRegistrations()->latest()->first();
     $result = session('result');
 
     if (!$result && $latestAttempt) {
-        $totalPoints = ExamQuestion::sum('points'); 
-        $percentage = $totalPoints > 0 ? ($latestAttempt->score / $totalPoints) * 100 : 0;
+        $totalPoints = ExamQuestion::sum('points');
+        $percentage = $totalPoints > 0
+            ? ($latestAttempt->score / $totalPoints) * 100
+            : 0;
 
         $result = [
-            'score' => $latestAttempt->score,
-            'total' => $totalPoints,
+            'score'      => $latestAttempt->score,
+            'total'      => $totalPoints,
             'percentage' => round($percentage, 2),
-            'status' => $latestAttempt->status,
+            'status'     => $latestAttempt->status,
         ];
     }
+
+    // If no result yet, provide random questions
     $questions = $result ? [] : ExamQuestion::inRandomOrder()
         ->limit(10)
         ->get();
 
-    return Inertia::render('Instructor/TheoreticalExam', [
-        'student'   => $student,
-        'questions' => $questions,
-        'result'    => $result,
-        'error'     => session('error'),
-         'course_registration_id' => $courseRegistration?->id,
+    return Inertia::render('Student/TheoreticalExam', [
+        'student'                => $student,
+        'questions'              => $questions,
+        'result'                 => $result,
+        'error'                  => session('error'),
+        'course_registration_id' => $courseRegistration->id,
     ]);
 }
+
 
 
 
