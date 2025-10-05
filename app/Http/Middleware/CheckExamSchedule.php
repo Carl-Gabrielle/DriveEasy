@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class CheckExamSchedule
 {
-    public function handle(Request $request, Closure $next)
+  public function handle(Request $request, Closure $next)
 {
     $student = Auth::user();
     $now = now();
@@ -20,7 +20,8 @@ class CheckExamSchedule
     })->get();
 
     $activeSchedule = $schedules->first(function ($schedule) use ($now) {
-        return $schedule->date === $now->toDateString();
+        return $schedule->date === $now->toDateString()
+               || $schedule->exam_status === 'force_started';
     });
 
     if (!$activeSchedule) {
@@ -30,5 +31,6 @@ class CheckExamSchedule
 
     return $next($request);
 }
+
 
 }

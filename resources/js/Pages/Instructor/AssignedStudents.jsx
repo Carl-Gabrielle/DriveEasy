@@ -3,6 +3,8 @@ import { Head, Link } from '@inertiajs/react';
 import { FiUser, FiCalendar, FiClock, FiMapPin, FiBook, FiGrid, FiList, FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { useState } from 'react';
 import { formatDate, formatTime } from '@/lib/dateFormatter';
+import { router } from "@inertiajs/react";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function AssignedStudents({ students }) {
     const [viewMode, setViewMode] = useState('list');
@@ -64,9 +66,25 @@ export default function AssignedStudents({ students }) {
 
     const calendarDays = generateCalendarDays();
 
+    function handleSubmit(e, scheduleId, courseType) {
+        e.preventDefault();
+
+        if (courseType?.toLowerCase() === "theoretical") {
+            router.put(
+                route("instructor.exam.start", { schedule: scheduleId }),
+                {},
+                {
+                    preserveState: true,
+                    onSuccess: () => toast.success("Student Assigned Successfully", { duration: 3000 }),
+                }
+            );
+        }
+    }
+
     return (
         <InstructorLayout>
             <Head title="My Schedule" />
+            <Toaster position="top-center" reverseOrder={false} />
             <div className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-screen">
                 <div className="max-w-7xl mx-auto">
                     {/* Header Section */}
@@ -266,16 +284,23 @@ export default function AssignedStudents({ students }) {
                                                         </div>
                                                     </div>
                                                     <div className="flex-shrink-0">
-                                                        <Link
-                                                            href={
-                                                                courseType?.toLowerCase() === "theoretical"
-                                                                    ? route("instructor.exam.show", student?.id)
-                                                                    : `/instructor/evaluateStudents/${student?.id}?courseType=${courseType}`
-                                                            }
-                                                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors rounded-lg"
-                                                        >
-                                                            {courseType?.toLowerCase() === "theoretical" ? "Take Exam" : "Evaluate"}
-                                                        </Link>
+                                                        {courseType?.toLowerCase() === "theoretical" ? (
+                                                            <button
+                                                                onClick={(e) => handleSubmit(e, item.id, courseType)}
+                                                                className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors rounded-lg"
+                                                            >
+                                                                Start Exam
+                                                            </button>
+                                                        ) : (
+                                                            <Link
+                                                                href={`/instructor/evaluateStudents/${item.course_registration.student_application.user.id}?courseType=${courseType}`}
+                                                                className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg"
+                                                            >
+                                                                Evaluate
+                                                            </Link>
+
+                                                        )}
+
 
                                                     </div>
 

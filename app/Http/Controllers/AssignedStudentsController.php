@@ -19,6 +19,7 @@ public function index()
         'courseRegistration.studentApplication.user',
     ])
     ->where('instructor_id', $instructor->id)
+    ->where('exam_status', '!=', 'force_started')
     ->whereHas('courseRegistration.studentApplication.user', function ($query) {
         $query->whereDoesntHave('evaluationsReceived', function ($q) {
             $q->whereColumn('course_type', 'course_registrations.course_type');

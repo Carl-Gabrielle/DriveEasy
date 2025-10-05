@@ -131,7 +131,6 @@ public function show()
     $studentId = Auth::id();
     $student   = Auth::user();
 
-    // Get the latest theoretical course registration
     $courseRegistration = $student->courseRegistrations()
         ->where('course_type', 'Theoretical')
         ->latest()
@@ -160,11 +159,15 @@ public function show()
             'status'     => $latestAttempt->status,
         ];
     }
+  $questions = ExamQuestion::limit(10)->get()->map(function ($q) {
+    return [
+        'id'       => $q->id,
+        'question' => $q->question,
+        'choices'  => is_string($q->choices) ? json_decode($q->choices, true) : $q->choices,
+    ];
+});
 
-    // If no result yet, provide random questions
-    $questions = $result ? [] : ExamQuestion::inRandomOrder()
-        ->limit(10)
-        ->get();
+
 
     return Inertia::render('Student/TheoreticalExam', [
         'student'                => $student,
@@ -174,6 +177,7 @@ public function show()
         'course_registration_id' => $courseRegistration->id,
     ]);
 }
+
 
 
 
@@ -189,10 +193,26 @@ public function show()
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+
+
+public function update(Request $request, $scheduleId)
+{
+   $exam = Schedule::findOrFail($scheduleId);
+$courseRegistration = $exam->courseRegistration;
+
+if ($courseRegistration && $courseRegistration->course_type === 'Theoretical') {
+    $exam->update(['exam_status' => 'force_started']);
+} else {
+    $validated = $request->validate([
+        'exam_status' => 'required|in:not_started,in_progress,completed,force_started',
+    ]);
+    $exam->update($validated);
+}
+
+
+    return back()->with('success', 'Exam status updated to ' . $exam->exam_status);
+}
+
 
     /**
      * Remove the specified resource from storage.

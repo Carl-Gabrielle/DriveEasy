@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->foreignId('instructor_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('course_registration_id')->nullable()->constrained()->onDelete('cascade'); 
             $table->string('location');
-            $table->enum('status', ['pending', 'confirmed'])->default('pending');
+           $table->enum('exam_status', ['not_started', 'in_progress', 'completed', 'force_started'])->default('not_started');
             $table->text('description')->nullable();
             $table->timestamps();
         });

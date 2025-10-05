@@ -10,15 +10,15 @@ export default function ScheduleCard({ item, formatDate, status, isActive }) {
     const datetime = `${item.date}T${item.time}`;
     const today = new Date();
     const scheduleDate = new Date(item.date);
-    const todayBadge = isToday(datetime);
+    const isTodayBadge = isToday(datetime);
+
     return (
         <div
             className={`relative rounded-xl border-2 p-5 transition-all duration-300 hover:shadow-md
-    ${isToday ? "border-green-500 bg-green-100 animate-in" : "border-gray-100 bg-white"} 
+   ${isTodayBadge ? "border-green-500 bg-green-100 animate-in" : "border-gray-100 bg-white"}
     ${status === "completed" ? "opacity-60" : ""}`}
         >
-
-            {isToday && (
+            {isTodayBadge && (
                 <div className="absolute -top-2 -right-2">
                     <span className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-ping ">
                         TODAY

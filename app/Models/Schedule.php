@@ -19,6 +19,7 @@ class Schedule extends Model
         'location',
         'status',
         'description',
+        'exam_status',
     ];
 
     /**
@@ -30,6 +31,7 @@ class Schedule extends Model
     {
         return $this->belongsTo(CourseRegistration::class);
     }
+    
 
     // Belongs to a user who is an instructor
     public function instructor()

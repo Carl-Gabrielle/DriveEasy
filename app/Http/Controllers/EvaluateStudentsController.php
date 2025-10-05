@@ -19,6 +19,7 @@ class EvaluateStudentsController extends Controller
      */
     public function index()
     {
+        
     return Inertia::render('Instructor/EvaluateStudents', [
             'students' => [], 
             'success' => session('success'),
