@@ -52,6 +52,7 @@ public function index()
                 'exam_status' => $schedule->exam_status,
             ];
         });
+        // dd($evaluations->toArray());
 
     return Inertia::render('Student/Performance', [
         'examSchedule' => $examSchedules,
@@ -60,9 +61,4 @@ public function index()
         'enrolledCourses' => $enrolledCourses,
     ]);
 }
-
-
-
-
-
 }

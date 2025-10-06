@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage, router } from "@inertiajs/react";
+import { Head, usePage, router, Link } from "@inertiajs/react";
 import { useState } from "react";
+import { HiMiniArrowLeft } from "react-icons/hi2";
 
 export default function TheoreticalExam({ student, questions, result, error, course_registration_id }) {
     const [answers, setAnswers] = useState({});
@@ -22,6 +23,13 @@ export default function TheoreticalExam({ student, questions, result, error, cou
             <Head title="Theoretical Exam" />
             <div className="max-w-4xl mx-auto">
                 <div className="mb-8 pt-6">
+                    <Link
+                        href={route('student.performance')}
+                        className="rounded-lg text-sm font-medium flex items-center gap-2 w-fit bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md py-2 px-4 hover:-translate-y-0.5"
+                    >
+                        <HiMiniArrowLeft size={14} />
+                        Back to Performance
+                    </Link>
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
                             <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-blue-700 bg-clip-text text-transparent">
@@ -180,8 +188,8 @@ export default function TheoreticalExam({ student, questions, result, error, cou
                                                     <label
                                                         key={letter}
                                                         className={`flex items-start p-4 rounded-lg border cursor-pointer transition-all duration-200 ${answers[q.id] === letter
-                                                                ? "bg-blue-50 border-blue-300"
-                                                                : "bg-slate-50 border-slate-200 hover:bg-slate-100"
+                                                            ? "bg-blue-50 border-blue-300"
+                                                            : "bg-slate-50 border-slate-200 hover:bg-slate-100"
                                                             }`}
                                                     >
                                                         <input

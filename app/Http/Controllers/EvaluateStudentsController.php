@@ -63,19 +63,21 @@ public function store(Request $request)
         return back()->withErrors(['course_type' => 'No course registration found for this student with the given type.']);
     }
 
-    // $alreadyEvaluated = StudentEvaluation::where('course_registration_id', $courseRegistration->id)->exists();
-    // if ($alreadyEvaluated) {
-    //     return back()->withErrors(['course_registration_id' => 'This course registration has already been evaluated.']);
-    // }
+    $status = $validated['total_score'] >= 75 ? 'PASSED' : 'FAILED';
+
+    $validated['instructor_notes'] = $status === 'PASSED'
+        ? "Student passed the {$validated['course_type']} exam."
+        : "Student failed the {$validated['course_type']} exam. Retake required.";
 
     $validated['course_registration_id'] = $courseRegistration->id;
+    $validated['remark'] = $status;
 
     $evaluation = StudentEvaluation::create($validated);
 
     $courseRegistration->update(['course_status' => 'completed']);
-
     return back()->with('success', 'Evaluation saved and course status updated!');
 }
+
 
 
 

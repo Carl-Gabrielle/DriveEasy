@@ -18,20 +18,26 @@ import {
 import { MdAccessTimeFilled, MdOutlineQuiz } from 'react-icons/md';
 
 export default function Performance() {
-    const {
+    let {
         evaluations = {},
         hasEvaluation = false,
         examSchedule = [],
         enrolledCourses = [],
     } = usePage().props;
 
+    examSchedule = Array.isArray(examSchedule)
+        ? examSchedule
+        : Object.values(examSchedule || {});
+
     const now = new Date();
 
-    // Combine course types from enrollment and evaluation data
-    const courseTypes = [...new Set([
-        ...Object.keys(evaluations),
-        ...enrolledCourses
-    ])];
+    const courseTypes = [
+        ...new Set(
+            [...Object.keys(evaluations), ...enrolledCourses]
+                .map(type => type.toLowerCase())
+        ),
+    ];
+
 
 
     /**
@@ -248,7 +254,8 @@ export default function Performance() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="space-y-10">
                     {courseTypes.map((courseType) => {
-                        const courseEvaluations = evaluations[courseType] || [];
+                        const normalizedType = courseType.toLowerCase();
+                        const courseEvaluations = evaluations[normalizedType] || [];
                         const evaluation = courseEvaluations[0] || null;
 
                         return (
@@ -257,20 +264,24 @@ export default function Performance() {
                                     {courseType.charAt(0).toUpperCase() + courseType.slice(1).toLowerCase()} Performance
                                 </h2>
 
-                                {courseType === 'Theoretical' && !evaluation && renderExamCard(
-                                    examSchedule.filter((item) => item.course === courseType)
+                                {courseType === 'theoretical' && !evaluation && renderExamCard(
+                                    examSchedule.filter((item) => item.course.toLowerCase() === courseType)
                                 )}
-                                {evaluation
-                                    ? renderEvaluationCard(evaluation, courseType)
-                                    : (
-                                        courseType === 'Practical' && (
-                                            <div className="bg-white border border-gray-200 rounded-xl p-6 text-center text-gray-500">
-                                                Your instructor will evaluate your performance soon.
-                                            </div>
-                                        ))}
+
+                                {evaluation && renderEvaluationCard(evaluation, courseType)}
+
+
+                                {courseType?.toLowerCase() === 'practical' && !evaluation && (
+                                    <div className="bg-white border border-gray-200 rounded-xl p-6 text-center text-gray-500">
+                                        Your instructor will evaluate your performance soon.
+                                    </div>
+                                )}
+
+
                             </div>
                         );
                     })}
+
                 </div>
             </div>
         </AuthenticatedLayout>

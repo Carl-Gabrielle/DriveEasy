@@ -58,7 +58,6 @@ export default function EvaluateStudents({ student, errors }) {
             scores: processedScores,
             total_score: totalScore,
             remark,
-            instructor_notes: practNotes || null,
         }, {
             preserveScroll: true,
             onSuccess: () => {
@@ -133,7 +132,6 @@ export default function EvaluateStudents({ student, errors }) {
                             scores={practicalScores}
                             setScores={setPracticalScores}
                             notes={practNotes}
-                            setNotes={setPractNotes}
                         />
                     </div>
                 </div>
