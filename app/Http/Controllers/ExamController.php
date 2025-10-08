@@ -33,6 +33,8 @@ public function store(Request $request)
     $request->validate([
         'course_registration_id' => 'required|exists:course_registrations,id',
         'answers' => 'required|array',
+        'question_ids' => 'sometimes|array',
+        'question_ids.*' => 'integer|exists:exam_questions,id',
     ]);
 
     $student = Auth::user();
@@ -52,7 +54,11 @@ public function store(Request $request)
         return redirect()->back()->with('error', 'This exam is only available for theoretical courses.');
     }
 
-    $questions = ExamQuestion::all();
+    $questionIds = $request->input('question_ids', array_keys($request->answers));
+
+    $questions = ExamQuestion::whereIn('id', $questionIds)->get();
+    // $questions = ExamQuestion::all();
+
     if ($questions->isEmpty()) {
         return redirect()->back()->with('error', 'No questions found for this exam.');
     }
@@ -105,7 +111,10 @@ public function store(Request $request)
             'remark' => $status,
         ]
     );
-
+ $courseRegistration->update([
+        'course_status' => 'completed',
+    ]);
+    
     return redirect()->back()->with([
         'result' => [
             'score' => $earnedPoints,
