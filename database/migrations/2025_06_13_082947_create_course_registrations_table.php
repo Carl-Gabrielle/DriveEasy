@@ -15,11 +15,11 @@ return new class extends Migration
 
             $table->enum('course_type', ['Theoretical', 'Practical']);
             $table->enum('registration_status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->enum('course_status', ['available', 'completed'])->default('available');
+            $table->enum('course_status', ['available', 'completed', 'not_started'])->default('available');
             $table->text('admin_remarks')->nullable();
 
             $table->timestamps();
-
+ 
             $table->unique(['student_application_id', 'course_type']);
         });
     }
